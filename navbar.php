@@ -1,11 +1,13 @@
-<?php
+<?php 
+// session_start();
 include_once('C:\xampp\htdocs\A&Lmoda\conexao.php');
 $totalItensCarrinho = 0;
 
-if (isset($_SESSION['usuario_id'])) {
-    $id_usuario = $_SESSION['usuario_id'];
 
-    $sql = "SELECT count(*) AS total FROM carrinho WHERE id_usuario = ?";
+if (isset($_SESSION['usuario_id'])) {
+    $id_usuario =$_SESSION['usuario_id'];
+
+    $sql = "SELECT COUNT(*) FROM `carrinho` WHERE id_usuario = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id_usuario);
     $stmt->execute();
@@ -14,6 +16,7 @@ if (isset($_SESSION['usuario_id'])) {
     $stmt->close();
 
     $totalItensCarrinho = $total ?? 0;
+   
 }
 ?>
 
