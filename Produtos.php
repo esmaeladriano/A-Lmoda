@@ -35,28 +35,37 @@ $produtos = $conn->query("SELECT p.id, p.nome, p.descricao, p.preco, p.imagem, c
 <div class="container py-5">
     <h2 class="text-center mb-4">🛍️ Produtos Disponíveis</h2>
     <div class="row">
-        <?php while($p = $produtos->fetch_assoc()): ?>
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <img src="<?= $p['imagem'] ?>" class="card-img-top" alt="<?= $p['nome'] ?>">
-                <div class="card-body">
-                    <h5 class="card-title"><?= $p['nome'] ?></h5>
-                    <p class="card-text"><?= $p['descricao'] ?></p>
-                    <p><strong>💰 <?= number_format($p['preco'], 2, ',', '.') ?> Kz</strong></p>
-                    <p>📂 <?= $p['categoria'] ?></p>
-                    <button 
-                        class="btn btn-primary btn-adicionar" 
-                        data-id="<?= $p['id'] ?>" 
-                        data-nome="<?= $p['nome'] ?>" 
-                        data-preco="<?= $p['preco'] ?>"
-                        data-imagem="<?= $p['imagem'] ?>">
-                        ➕ Adicionar ao Carrinho
-                    </button>
-                </div>
+    <?php while($p = $produtos->fetch_assoc()): ?>
+    <div class="col-md-4 mb-4">
+        <div class="card shadow border-0 h-100" style="transition: transform 0.3s ease; border-radius: 20px;">
+            <img 
+                src="http://localhost/A&Lmoda/painel/admin/uploads/<?= $p['imagem'] ?>" 
+                class="card-img-top img-fluid rounded-top" 
+                style="height: 200px; object-fit: cover; border-top-left-radius: 20px; border-top-right-radius: 20px;" 
+                alt="<?= $p['nome'] ?>"
+            >
+            <div class="card-body bg-light" style="border-radius: 0 0 20px 20px;">
+                <h5 class="card-title text-primary fw-bold"><?= $p['nome'] ?> ✨</h5>
+                <p class="card-text text-muted small">
+                    <?= mb_strimwidth($p['descricao'], 0, 100, "...") ?>
+                </p>
+                <p class="mb-1"><span class="badge bg-success">💰 <?= number_format($p['preco'], 2, ',', '.') ?> Kz</span></p>
+                <p class="text-secondary">📁 <em><?= $p['categoria'] ?></em></p>
+
+                <button 
+                    class="btn btn-outline-primary btn-sm btn-adicionar w-100 fw-bold"
+                    data-id="<?= $p['id'] ?>" 
+                    data-nome="<?= $p['nome'] ?>" 
+                    data-preco="<?= $p['preco'] ?>"
+                    data-imagem="<?= $p['imagem'] ?>">
+                    ➕ Adicionar ao Carrinho
+                </button>
             </div>
         </div>
-        <?php endwhile; ?>
     </div>
+    <?php endwhile; ?>
+</div>
+
 </div>
 
 <!-- MODAL -->
