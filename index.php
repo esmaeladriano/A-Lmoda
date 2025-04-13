@@ -28,64 +28,9 @@ if (session_status() === PHP_SESSION_NONE) {
 
     ?>
 
-    <!-- SLIDER / HERO -->
-    <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
-        <!-- Indicadores -->
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="0" class="active" aria-current="true"
-                aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
+ 
 
-        <!-- Slides -->
-        <div class="carousel-inner">
-            <!-- Slide 1 -->
-            <div class="carousel-item active">
-                <img src="https://images.pexels.com/photos/12512195/pexels-photo-12512195.jpeg" class="d-block w-100"
-                    alt="Produto 1">
-                <div class="carousel-caption d-none d-md-block animate__animated animate__fadeInUp">
-                    <h5 class="fw-bold">🌟 Nova Coleção 2025</h5>
-                    <p>Estilo, Elegância e Tendência em um só lugar.</p>
-                    <a href="#comprar" class="btn btn-warning">🛍️ Ver Produtos</a>
-                </div>
-            </div>
-
-            <!-- Slide 2 -->
-            <div class="carousel-item">
-                <img src="https://images.pexels.com/photos/7679732/pexels-photo-7679732.jpeg" class="d-block w-100"
-                    alt="Produto 2">
-                <div class="carousel-caption d-none d-md-block animate__animated animate__fadeInUp">
-                    <h5 class="fw-bold">👠 Elegância e Charme</h5>
-                    <p>Confira os sapatos que estão a conquistar o mundo.</p>
-                    <p><strong>Preço: R$ 250,00</strong></p>
-                    <button class="btn btn-success">Adicionar ao Carrinho</button>
-                </div>
-            </div>
-
-            <!-- Slide 3 -->
-            <div class="carousel-item">
-                <img src="https://images.pexels.com/photos/5886041/pexels-photo-5886041.jpeg" class="d-block w-100"
-                    alt="Produto 3">
-                <div class="carousel-caption d-none d-md-block animate__animated animate__fadeInUp">
-                    <h5 class="fw-bold">👜 Bolsas Exclusivas</h5>
-                    <p>Luxo e praticidade para o seu dia a dia.</p>
-                    <p><strong>Preço: R$ 300,00</strong></p>
-                    <button class="btn btn-success">Adicionar ao Carrinho</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Botões de Navegação -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Próximo</span>
-        </button>
-    </div>
+    <?php include_once('./slider.php') ?>
 
     <?php include_once('./Produtos.php') ?>
 
