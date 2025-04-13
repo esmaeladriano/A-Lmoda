@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Administração - Boutique</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            background-color: rgb(218, 218, 218);
+        }
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            background-color: #343a40;
+            padding: 20px;
+        }
+        .sidebar a {
+            color: #e2e2e2;
+            margin-bottom: 15px;
+            display: block;
+            text-decoration: none;
+        }
+        .sidebar a:hover {
+            color: #ffc107;
+        }
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            flex: 1;
+        }
+        .navbar {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+        }
+        .card {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h4 class="text-white">Painel de Administração</h4>
+    <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
+        <i class="fas fa-tachometer-alt"></i> <span class="d-none d-md-inline">Dashboard</span>
+    </a>
+    <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
+        <i class="fas fa-users"></i> <span class="d-none d-md-inline">Gerenciar Clientes <a href="./Adme.html"></a></span>
+    </a>
+    <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
+        <i class="fas fa-box"></i> <span class="d-none d-md-inline">Gerenciar Produtos</span>
+    </a>
+    <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
+        <i class="fas fa-tags"></i> <span class="d-none d-md-inline">Gerenciar Categorias</span>
+    </a>
+    <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
+        <i class="fas fa-shopping-cart"></i> <span class="d-none d-md-inline">Gerenciar Pedidos</span>
+    </a>
+    <a href="#" class="list-group-item list-group-item-action bg-dark text-white">
+        <i class="fas fa-chart-line"></i> <span class="d-none d-md-inline">Relatórios</span>
+    </a>
+</div>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Boutique Admin</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#">Perfil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Configurações</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./login/LOGIN.HTML">Sair</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="main-content">
+    <div class="container">
+        <h1 class="my-4">Gerenciar Boutique</h1>
+        
+        <!-- Seção de gerenciamento de produtos -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-box"></i> Produtos
+            </div>
+            <div class="card-body">
+                <a href="#" class="btn btn-primary">Adicionar Novo Produto</a>
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nome do Produto</th>
+                            <th>Categoria</th>
+                            <th>Preço</th>
+                            <th>Estoque</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Vestido Vermelho</td>
+                            <td>Roupas</td>
+                            <td>R$ 199,90</td>
+                            <td>10</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-warning">Editar</a>
+                                <a href="#" class="btn btn-sm btn-danger">Excluir</a>
+                            </td>
+                        </tr>
+                        <!-- Outros produtos -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Seção de gerenciamento de categorias -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-tags"></i> Categorias
+            </div>
+            <div class="card-body">
+                <a href="#" class="btn btn-primary">Adicionar Nova Categoria</a>
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nome da Categoria</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>Roupas</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-warning">Editar</a>
+                                <a href="#" class="btn btn-sm btn-danger">Excluir</a>
+                            </td>
+                        </tr>
+                        <!-- Outras categorias -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Seção de gerenciamento de pedidos -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-shopping-cart"></i> Pedidos
+            </div>
+            <div class="card-body">
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Cliente</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>João Silva</td>
+                            <td>10/05/2024</td>
+                            <td>Pendente</td>
+                            <td>R$ 399,80</td>
+                            <td>
+                                <a href="#" class="btn btn-sm btn-info">Ver Detalhes</a>
+                            </td>
+                        </tr>
+                        <!-- Outros pedidos -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

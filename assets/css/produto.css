@@ -1,0 +1,25 @@
+
+a{
+    text-decoration: none;
+    color: #000;
+    
+}
+.sidebar{
+ position: absolute;
+    background-color: #ffffff;
+    margin-top: 45px;
+    width: 250px;
+    height: 75%;
+   
+    font-size:20px;
+    
+
+}
+   
+   
+
+.sidebar ul  li {
+    gap: 40%;
+    list-style: none;
+}
+
