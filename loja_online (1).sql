@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 13-Abr-2025 às 17:01
+-- Tempo de geração: 14-Abr-2025 às 00:58
 -- Versão do servidor: 10.4.32-MariaDB
 -- versão do PHP: 8.2.12
 
@@ -92,13 +92,6 @@ CREATE TABLE `itens_pedido` (
   `preco_unitario` decimal(10,2) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Extraindo dados da tabela `itens_pedido`
---
-
-INSERT INTO `itens_pedido` (`id`, `id_pedido`, `id_produto`, `quantidade`, `preco_unitario`) VALUES
-(1, 1, 3, 1, 34332.00);
-
 -- --------------------------------------------------------
 
 --
@@ -112,15 +105,6 @@ CREATE TABLE `itens_venda` (
   `quantidade` int(11) NOT NULL,
   `preco_unitario` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Extraindo dados da tabela `itens_venda`
---
-
-INSERT INTO `itens_venda` (`id_item`, `id_venda`, `id_produto`, `quantidade`, `preco_unitario`) VALUES
-(5, 5, 3, 222, 34332.00),
-(6, 6, 2, 5, 2345.00),
-(7, 6, 2, 2, 2345.00);
 
 -- --------------------------------------------------------
 
@@ -163,7 +147,9 @@ CREATE TABLE `pedidos` (
 --
 
 INSERT INTO `pedidos` (`id`, `id_usuario`, `data_pedido`, `total`, `status`) VALUES
-(1, 2, '2025-04-13 15:28:20', 34332.00, 'pendente');
+(1, 2, '2025-04-13 15:28:20', 34332.00, 'pendente'),
+(2, 2, '2025-04-13 21:06:03', 18000.00, 'pendente'),
+(3, 1, '2025-04-13 22:26:05', 126000.00, 'pendente');
 
 -- --------------------------------------------------------
 
@@ -187,8 +173,15 @@ CREATE TABLE `produtos` (
 --
 
 INSERT INTO `produtos` (`id`, `nome`, `descricao`, `preco`, `categoria_id`, `imagem`, `destaque`, `data_adicao`) VALUES
-(2, 'Bol', 'ssss', 2345.00, 1, '67fb988a8222c.jpg', 1, '2025-04-13 10:57:14'),
-(3, 'dssd', 'fffd', 34332.00, 1, '', 1, '2025-04-13 13:04:52');
+(11, 'Ass', 'cjjgjdjd', 2.00, 3, '67fc2ce7abb40.png', 0, '2025-04-13 21:30:15'),
+(12, 'hhhh', 'fgshsrhsrutrs', 8455.00, 3, '67fc2e58ee253.png', 0, '2025-04-13 21:36:24'),
+(13, 'hfkru', 'huyiuy', 254.00, 3, '67fc2e6ca14ca.png', 0, '2025-04-13 21:36:44'),
+(15, 'fmjffjh', 'ghgmgh', 2554.00, 1, '67fc3099c3f73.jpg', 1, '2025-04-13 21:46:01'),
+(16, 'ojhjh', 'vhjfjhf', 2563.00, 3, '67fc30be5cf1d.jpg', 1, '2025-04-13 21:46:38'),
+(17, 'hgmghjghjgjh', 'jmfjmfjh', 36589.00, 3, '67fc30d79d958.jpg', 1, '2025-04-13 21:47:03'),
+(18, 'aeagere', 'fhfffy', 2356.00, 1, '67fc310395347.jpg', 1, '2025-04-13 21:47:47'),
+(19, 'hmgfmf', 'xnmms', 2354.00, 3, '67fc3269132c7.jpg', 0, '2025-04-13 21:53:45'),
+(20, 'ojjj', 'ffdgsbn', 2365.00, 1, '67fc329c14376.jpg', 0, '2025-04-13 21:54:36');
 
 -- --------------------------------------------------------
 
@@ -211,7 +204,8 @@ CREATE TABLE `usuarios` (
 
 INSERT INTO `usuarios` (`id`, `nome`, `email`, `senha`, `tipo`, `data_cadastro`) VALUES
 (1, 'Esmael Adriano', 'esma@gmail.com', '$2y$10$b/wFLskftp9D48bwwTlAfunlesB03.Pg3lSjA4qqtHldyCO/KBohW', 'admin', '2025-04-13 07:58:03'),
-(2, 'ALice', 'admin@gmail.com', '$2y$10$tqvyz5uR8FW9KqSmt1TTW.ywFdYbO143jLR7E3bS9dlrAN7L7yi9q', 'cliente', '2025-04-13 10:15:16');
+(2, 'ALice', 'admin@gmail.com', '$2y$10$tqvyz5uR8FW9KqSmt1TTW.ywFdYbO143jLR7E3bS9dlrAN7L7yi9q', 'cliente', '2025-04-13 10:15:16'),
+(7, 'aaa', 'admain@gmail.com', '$2y$10$XdY/AbeHbEP58rlnKRXZLusF4tPWwrG/HiXXdciVTQ4h8vyO7E6aO', 'cliente', '2025-04-13 22:53:27');
 
 -- --------------------------------------------------------
 
@@ -244,7 +238,7 @@ INSERT INTO `vendas` (`id_venda`, `nome_cliente`, `data_venda`, `tipo_pagamento`
 ALTER TABLE `carrinho`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_usuario` (`id_usuario`),
-  ADD KEY `id_produto` (`id_produto`);
+  ADD KEY `fk_produto_carrinho` (`id_produto`);
 
 --
 -- Índices para tabela `categorias`
@@ -272,8 +266,8 @@ ALTER TABLE `itens_pedido`
 --
 ALTER TABLE `itens_venda`
   ADD PRIMARY KEY (`id_item`),
-  ADD KEY `id_venda` (`id_venda`),
-  ADD KEY `id_produto` (`id_produto`);
+  ADD KEY `fk_produto_venda` (`id_produto`),
+  ADD KEY `fk_produto_vendaas` (`id_venda`);
 
 --
 -- Índices para tabela `marcas`
@@ -293,7 +287,7 @@ ALTER TABLE `pedidos`
 --
 ALTER TABLE `produtos`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `categoria_id` (`categoria_id`);
+  ADD KEY `fk_produto_categoria` (`categoria_id`);
 
 --
 -- Índices para tabela `usuarios`
@@ -316,7 +310,7 @@ ALTER TABLE `vendas`
 -- AUTO_INCREMENT de tabela `carrinho`
 --
 ALTER TABLE `carrinho`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `categorias`
@@ -334,7 +328,7 @@ ALTER TABLE `depoimentos`
 -- AUTO_INCREMENT de tabela `itens_pedido`
 --
 ALTER TABLE `itens_pedido`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `itens_venda`
@@ -352,19 +346,19 @@ ALTER TABLE `marcas`
 -- AUTO_INCREMENT de tabela `pedidos`
 --
 ALTER TABLE `pedidos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de tabela `produtos`
 --
 ALTER TABLE `produtos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de tabela `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de tabela `vendas`
@@ -381,7 +375,8 @@ ALTER TABLE `vendas`
 --
 ALTER TABLE `carrinho`
   ADD CONSTRAINT `carrinho_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuarios` (`id`),
-  ADD CONSTRAINT `carrinho_ibfk_2` FOREIGN KEY (`id_produto`) REFERENCES `produtos` (`id`);
+  ADD CONSTRAINT `carrinho_ibfk_2` FOREIGN KEY (`id_produto`) REFERENCES `produtos` (`id`),
+  ADD CONSTRAINT `fk_produto_carrinho` FOREIGN KEY (`id_produto`) REFERENCES `produtos` (`id`) ON DELETE CASCADE;
 
 --
 -- Limitadores para a tabela `depoimentos`
@@ -400,6 +395,8 @@ ALTER TABLE `itens_pedido`
 -- Limitadores para a tabela `itens_venda`
 --
 ALTER TABLE `itens_venda`
+  ADD CONSTRAINT `fk_produto_venda` FOREIGN KEY (`id_produto`) REFERENCES `produtos` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_produto_vendaas` FOREIGN KEY (`id_venda`) REFERENCES `vendas` (`id_venda`) ON DELETE CASCADE,
   ADD CONSTRAINT `itens_venda_ibfk_1` FOREIGN KEY (`id_venda`) REFERENCES `vendas` (`id_venda`),
   ADD CONSTRAINT `itens_venda_ibfk_2` FOREIGN KEY (`id_produto`) REFERENCES `produtos` (`id`);
 
@@ -413,6 +410,7 @@ ALTER TABLE `pedidos`
 -- Limitadores para a tabela `produtos`
 --
 ALTER TABLE `produtos`
+  ADD CONSTRAINT `fk_produto_categoria` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `produtos_ibfk_1` FOREIGN KEY (`categoria_id`) REFERENCES `categorias` (`id`);
 COMMIT;
 
