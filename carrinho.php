@@ -6,13 +6,17 @@ if (session_status() === PHP_SESSION_NONE) {
 // Conectar com o banco de dados
 include_once('C:\xampp\htdocs\A&Lmoda\conexao.php');
 
+if (!$conn) {
+    die("Erro ao conectar com o banco de dados: " . mysqli_connect_error());
+}
+
 // Verificar se o usuário está logado
-if (!isset( $_SESSION['usuario_id'])) {
-    echo "Você precisa estar logado para ver o carrinho.";
+if (!isset($_SESSION['usuario_id'])) {
+    echo "<div class='alert alert-warning text-center'>Você precisa estar logado para ver o carrinho.</div>";
     exit;
 }
 
-$id_usuario =  $_SESSION['usuario_id'];
+$id_usuario = $_SESSION['usuario_id'];
 
 // Obter os itens no carrinho do usuário
 $query = "SELECT c.id, c.id_produto, c.quantidade, p.nome, p.preco, p.imagem 
@@ -25,10 +29,10 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 // Verificar se o carrinho está vazio
+$produtos_no_carrinho = [];
 if ($result->num_rows === 0) {
-    echo "<p>Seu carrinho está vazio!</p>";
+    echo "<div class='alert alert-info text-center'>Seu carrinho está vazio!</div>";
 } else {
-    $produtos_no_carrinho = [];
     while ($row = $result->fetch_assoc()) {
         $produtos_no_carrinho[] = $row;
     }
@@ -118,41 +122,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
 </head>
 <body class="p-4">
 
-<h3 class="animate__animated animate__fadeIn">🛒 Seu Carrinho</h3>
+<div class="container"></div></div>
+    <h3 class="animate__animated animate__fadeIn text-center mb-4">🛒 Seu Carrinho</h3>
 
-<?php if (!empty($produtos_no_carrinho)): ?>
-    <div id="carrinho-container">
-        <?php 
-        $total = 0;
-        foreach ($produtos_no_carrinho as $produto):
-            $total += $produto['preco'] * $produto['quantidade'];
-        ?>
-        <div class="product-card animate__animated animate__fadeInUp" id="produto-<?= $produto['id'] ?>">
-            <img src="<?= $produto['imagem'] ?>" alt="<?= $produto['nome'] ?>">
-            <div class="product-info">
-                <h5><?= $produto['nome'] ?></h5>
-                <p>Preço: R$ <?= number_format($produto['preco'], 2, ',', '.') ?></p>
-                <div class="d-flex align-items-center">
-                    <input type="number" value="<?= $produto['quantidade'] ?>" class="form-control quantity-input" data-produto-id="<?= $produto['id'] ?>" onchange="atualizarQuantidade(<?= $produto['id'] ?>)">
-                    <button class="btn btn-danger btn-sm ms-2" onclick="removerDoCarrinho(<?= $produto['id'] ?>)">🗑</button>
+    <?php if (!empty($produtos_no_carrinho)): ?>
+        <div id="carrinho-container">
+            <?php 
+            $total = 0;
+            foreach ($produtos_no_carrinho as $produto):
+                $total += $produto['preco'] * $produto['quantidade'];
+            ?>
+            <div class="product-card animate__animated animate__fadeInUp" id="produto-<?= $produto['id'] ?>">
+                <img src="<?= $produto['imagem'] ?>" alt="<?= $produto['nome'] ?>">
+                <div class="product-info">
+                    <h5><?= $produto['nome'] ?></h5>
+                    <p>Preço: R$ <?= number_format($produto['preco'], 2, ',', '.') ?></p>
+                    <div class="d-flex align-items-center">
+                        <input type="number" value="<?= $produto['quantidade'] ?>" class="form-control quantity-input" data-produto-id="<?= $produto['id'] ?>" onchange="atualizarQuantidade(<?= $produto['id'] ?>)">
+                        <button class="btn btn-danger btn-sm ms-2" onclick="removerDoCarrinho(<?= $produto['id'] ?>)">🗑</button>
+                    </div>
+                </div>
+                <div class="product-price">
+                    <p>Subtotal: R$ <span class="subtotal" id="subtotal-<?= $produto['id'] ?>"><?= number_format($produto['preco'] * $produto['quantidade'], 2, ',', '.') ?></span></p>
                 </div>
             </div>
-            <div class="product-price">
-                <p>Subtotal: R$ <span class="subtotal" id="subtotal-<?= $produto['id'] ?>"><?= number_format($produto['preco'] * $produto['quantidade'], 2, ',', '.') ?></span></p>
+            <?php endforeach; ?>
+
+            <div class="total-price text-end mt-3">
+                Total: R$ <span id="total-price"><?= number_format($total, 2, ',', '.') ?></span>
+            </div>
+
+            <div class="text-end">
+                <a href="efetuar_pedido.php" class="btn btn-success btn-finalizar mt-3">🧾 Efetuar Pedido</a>
             </div>
         </div>
-        <?php endforeach; ?>
-
-        <div class="total-price">
-            Total: R$ <span id="total-price"><?= number_format($total, 2, ',', '.') ?></span>
-        </div>
-
-        <a href="efetuar_pedido.php" class="btn btn-success mt-3">🧾 Efetuar Pedido</a>
-    </div>
-<?php endif; ?>
+    <?php endif; ?>
+</div>
 
 <script>
-    // Função para remover item do carrinho
     function removerDoCarrinho(id_produto) {
         if (confirm("Você tem certeza que deseja remover este produto do carrinho?")) {
             fetch('', {
@@ -164,12 +171,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             }).then(response => response.text())
               .then(response => {
                   alert(response);
-                  location.reload();  // Atualiza a página para refletir as mudanças
+                  location.reload();
               });
         }
     }
 
-    // Função para atualizar quantidade de um produto
     function atualizarQuantidade(id_produto) {
         let quantidade = document.querySelector(`[data-produto-id='${id_produto}']`).value;
         
@@ -189,7 +195,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
           });
     }
 
-    // Função para atualizar o total do carrinho
     function atualizarTotal() {
         let total = 0;
         document.querySelectorAll('.subtotal').forEach(function(subtotal) {
