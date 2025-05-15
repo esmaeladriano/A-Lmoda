@@ -202,7 +202,6 @@
             </div>
         </div>
 
-
         <div class='col-md-4 mb-2'>
             <div class='one-card'>
                 <div class='photo'><!--quardacarde-->
@@ -255,7 +254,6 @@
                 </div>
             </div>
         </div>
-
 
         <div class='col-md-4 mb-2'>
             <div class='one-card'>

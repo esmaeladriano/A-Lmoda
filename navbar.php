@@ -1,11 +1,11 @@
-<?php 
+<?php
 // session_start();
 include_once('C:\xampp\htdocs\A&Lmoda\conexao.php');
 $totalItensCarrinho = 0;
 
 
 if (isset($_SESSION['usuario_id'])) {
-    $id_usuario =$_SESSION['usuario_id'];
+    $id_usuario = $_SESSION['usuario_id'];
 
     $sql = "SELECT COUNT(*) FROM `carrinho` WHERE id_usuario = ?";
     $stmt = $conn->prepare($sql);
@@ -16,7 +16,6 @@ if (isset($_SESSION['usuario_id'])) {
     $stmt->close();
 
     $totalItensCarrinho = $total ?? 0;
-   
 }
 ?>
 
@@ -48,13 +47,16 @@ if (isset($_SESSION['usuario_id'])) {
     <h5 class="mb-1 display-3 text-primary fw-bold">🛍️ A&L MODA</h5>
     <div class="d-flex justify-content-center gap-3 flex-wrap">
         <div class="position-relative w-50">
-            <input type="text" class="form-control rounded-pill px-4 py-3" placeholder="🔍 Pesquise aqui...">
+            <input type="text" id="search-bar" class="form-control rounded-pill px-4 py-3" placeholder="🔍 Pesquise aqui...">
             <span class="position-absolute top-50 end-0 translate-middle-y pe-3">
                 <button class="btn btn-warning rounded-circle">
                     <i class="bi bi-search"></i>
                 </button>
             </span>
+            <div id="search-results" class="position-absolute w-100 bg-white border rounded mt-1" style="z-index: 1000; display: none;"></div>
         </div>
+
+
         <a href="carrinho.php" class="btn btn-warning rounded-pill d-flex align-items-center gap-2">
             🛒 <span class="badge bg-danger"><?= $totalItensCarrinho ?></span>
         </a>
@@ -105,3 +107,45 @@ if (isset($_SESSION['usuario_id'])) {
 
 <!-- Biblioteca de Ícones Bootstrap Icons -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#search-bar').on('keyup', function() {
+            let query = $(this).val().trim();
+
+            if (query.length > 0) {
+                $.ajax({
+                    url: 'search.php',
+                    method: 'GET',
+                    data: { q: query },
+                    success: function(data) {
+                        console.log(data);
+                        try {
+                            let results = JSON.parse(data);
+                            console.log(results);
+                            // Customize the display of results as needed
+                            // let html = `<div class="result-item p-2 border-bottom">${results}</div>`;
+                            // $('#search-results').html(html).show();
+                        } catch (e) {
+                            console.error('Error processing results:', e);
+                            $('#search-results').html('<div class="p-2 text-danger">Error processing results.</div>').show();
+                        }
+                    },
+                    error: function() {
+                        $('#search-results').html('<div class="p-2 text-danger">Error fetching results.</div>').show();
+                    }
+                });
+            } else {
+                $('#search-results').hide();
+            }
+        });
+
+        // Hide results when clicking outside the search bar or results container
+        $(document).on('click', function(e) {
+            if (!$(e.target).closest('#search-bar, #search-results').length) {
+                $('#search-results').hide();
+            }
+        });
+    });
+</script>

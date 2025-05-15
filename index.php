@@ -33,6 +33,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <?php include_once('./slider.php') ?>
 
     <?php include_once('./Produtos.php') ?>
+    <?php include_once('./produtosCategorias.php') ?>
 
 
     <!------------testmonial--------------->

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 14-Abr-2025 às 00:58
+-- Tempo de geração: 03-Maio-2025 às 10:17
 -- Versão do servidor: 10.4.32-MariaDB
 -- versão do PHP: 8.2.12
 
@@ -225,8 +225,7 @@ CREATE TABLE `vendas` (
 --
 
 INSERT INTO `vendas` (`id_venda`, `nome_cliente`, `data_venda`, `tipo_pagamento`) VALUES
-(5, 'dd', '2025-04-13 14:09:42', 'Dinheiro'),
-(6, 'hh', '2025-04-13 14:13:44', 'Dinheiro');
+(5, 'dd', '2025-04-13 14:09:42', 'Dinheiro');
 
 --
 -- Índices para tabelas despejadas
