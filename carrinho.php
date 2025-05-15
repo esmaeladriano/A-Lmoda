@@ -4,7 +4,7 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 // Conectar com o banco de dados
-include_once('C:\xampp\htdocs\A&Lmoda\conexao.php');
+include_once('./conexao.php');
 
 if (!$conn) {
     die("Erro ao conectar com o banco de dados: " . mysqli_connect_error());
@@ -17,6 +17,8 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 $id_usuario = $_SESSION['usuario_id'];
+
+
 
 // Obter os itens no carrinho do usuário
 $query = "SELECT c.id, c.id_produto, c.quantidade, p.nome, p.preco, p.imagem 
@@ -41,6 +43,7 @@ if ($result->num_rows === 0) {
 // Função para remover produto do carrinho
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] == 'remover') {
     $id_produto = $_POST['id_produto'];
+    echo("ID do usuário: " . $id_usuario . "<br>" . $id_produto);
     $stmt = $conn->prepare("DELETE FROM carrinho WHERE id_usuario = ? AND id_produto = ?");
     $stmt->bind_param("ii", $id_usuario, $id_produto);
     $stmt->execute();
@@ -139,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                     <p>Preço: R$ <?= number_format($produto['preco'], 2, ',', '.') ?></p>
                     <div class="d-flex align-items-center">
                         <input type="number" value="<?= $produto['quantidade'] ?>" class="form-control quantity-input" data-produto-id="<?= $produto['id'] ?>" onchange="atualizarQuantidade(<?= $produto['id'] ?>)">
-                        <button class="btn btn-danger btn-sm ms-2" onclick="removerDoCarrinho(<?= $produto['id'] ?>)">🗑</button>
+                        <button class="btn btn-danger btn-sm ms-2" onclick="removerDoCarrinho(<?= $produto['id_produto'] ?>)">🗑</button>
                     </div>
                 </div>
                 <div class="product-price">

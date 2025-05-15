@@ -1,5 +1,8 @@
 <?php
-include_once('C:\xampp\htdocs\A&Lmoda\conexao.php');
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+include_once 'conexao.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["acao"]) && $_POST["acao"] === "adicionar") {
     $id_usuario = $_SESSION['usuario_id'];
@@ -154,6 +157,7 @@ $('#formCarrinho').submit(function (e) {
         id_produto: $('#produto_id').val(),
         quantidade: $('#quantidade').val()
     }, function (res) {
+        console.log(res);
         const r = JSON.parse(res);
         if (r.status === 'sucesso') {
             alert('✅ Produto adicionado ao carrinho!');
