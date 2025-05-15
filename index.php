@@ -41,21 +41,36 @@ if (session_status() === PHP_SESSION_NONE) {
     <div class="brands container">
         <div class="small-container">
             <div class="row">
-                <div class="col-6 col-sm-4 col-md-2 parto">
-                    <img src="img/logo-godrej.png" alt="Godrej" class="img-fluid">
-                </div>
-                <div class="col-6 col-sm-4 col-md-2 parto">
-                    <img src="img/logo-oppo.png" alt="Oppo" class="img-fluid">
-                </div>
-                <div class="col-6 col-sm-4 col-md-2 parto">
-                    <img src="img/logo-coca-cola.png" alt="Coca-Cola" class="img-fluid">
-                </div>
-                <div class="col-6 col-sm-4 col-md-2 parto">
-                    <img src="img/logo-paypal.png" alt="Paypal" class="img-fluid">
-                </div>
-                <div class="col-6 col-sm-4 col-md-2 parto">
-                    <img src="img/logo-philips.png" alt="Philips" class="img-fluid">
-                </div>
+                <?php
+                   // Conexão com banco
+            $servername = "localhost";
+            $username = "root";
+            $password = "";
+            $dbname = "loja_online";
+
+            $conn = new mysqli($servername, $username, $password, $dbname);
+
+            if ($conn->connect_error) {
+                echo '<p class="text-center w-100">Erro na conexão: ' . $conn->connect_error . '</p>';
+            } 
+                // Fetch brands from the database
+                $sql = "SELECT logo, nome FROM marcas";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    // Output data for each row
+                    while ($row = $result->fetch_assoc()) {
+                        echo '<div class="col-6 col-sm-4 col-md-2 parto">';
+                        echo '<img src="http://localhost/A&Lmoda/painel/admin/uploads/' . htmlspecialchars($row['logo']) . '" alt="' . htmlspecialchars($row['nome']) . '" class="img-fluid">';
+                        echo '</div>';
+                    }
+                } else {
+                    echo '<p>No brands available.</p>';
+                }
+
+                // Close connection
+                $conn->close();
+                ?>
             </div>
         </div>
     </div>
