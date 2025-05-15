@@ -34,59 +34,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <?php include_once('./Produtos.php') ?>
     <?php include_once('./produtosCategorias.php') ?>
+    <?php include_once('./testemunho.php') ?>
 
-
-    <!------------testmonial--------------->
-    <div class="testimonial container justify-content-center">
-        <div class="small-container">
-            <div class="row">
-                <div class="col teste">
-                    <i class="fas fa-quote-left"></i>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.</p>
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <img src="img/user-2.png" alt="User Image">
-                    <h3>Mike McBean</h3>
-                </div>
-
-                <div class="col teste mx-2">
-                    <i class="fas fa-quote-left"></i>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.</p>
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="far fa-star"></i>
-                        <i class="far fa-star"></i>
-                    </div>
-                    <img src="img/user-1.png" alt="User Image">
-                    <h3>Sean Parker</h3>
-                </div>
-
-                <div class="col teste">
-                    <i class="fas fa-quote-left"></i>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                        labore et dolore magna aliqua.</p>
-                    <div class="rating">
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                        <i class="fas fa-star"></i>
-                    </div>
-                    <img src="img/user-3.png" alt="User Image">
-                    <h3>Susan Hopister</h3>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-----------------------------------brands----------------------------->
     <div class="brands container">
