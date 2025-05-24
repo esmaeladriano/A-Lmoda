@@ -134,9 +134,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $total = 0;
             foreach ($produtos_no_carrinho as $produto):
                 $total += $produto['preco'] * $produto['quantidade'];
+            
             ?>
+            
             <div class="product-card animate__animated animate__fadeInUp" id="produto-<?= $produto['id'] ?>">
-                <img src="<?= $produto['imagem'] ?>" alt="<?= $produto['nome'] ?>">
+                <img src="<?= 'http://localhost/A&Lmoda/painel/admin/uploads/'.$produto['imagem'] ?>" alt="<?= $produto['nome'] ?>">
                 <div class="product-info">
                     <h5><?= $produto['nome'] ?></h5>
                     <p>Preço: R$ <?= number_format($produto['preco'], 2, ',', '.') ?></p>

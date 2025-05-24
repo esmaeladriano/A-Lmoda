@@ -23,7 +23,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["acao"]) && $_POST["ac
 $produtos = $conn->query("SELECT p.id, p.nome, p.descricao, p.preco, p.imagem, c.nome AS categoria FROM produtos p 
 JOIN categorias c ON p.categoria_id = c.id 
 WHERE destaque <> 1
-ORDER BY p.data_adicao DESC");
+ORDER BY p.data_adicao DESC
+limit 4");
 
 $lista_produtos = [];
 while($p = $produtos->fetch_assoc()) {
@@ -43,49 +44,31 @@ while($p = $produtos->fetch_assoc()) {
 
 <div class="container py-5">
     <h2 class="text-center mb-4">🛍️ Produtos Disponíveis</h2>
-
-    <div id="carouselProdutos" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <?php 
-            $chunked = array_chunk($lista_produtos, 3);
-            foreach ($chunked as $index => $grupo): 
-            ?>
-            <div class="carousel-item <?= $index === 0 ? 'active' : '' ?>">
-                <div class="row">
-                    <?php foreach ($grupo as $p): ?>
-                    <div class="col-md-4">
-                        <div class="card shadow border-0 h-100 mb-4" style="transition: transform 0.3s ease; border-radius: 20px;">
-                            <img src="http://localhost/A&Lmoda/painel/admin/uploads/<?= $p['imagem'] ?>" 
-                                class="card-img-top img-fluid rounded-top" 
-                                style="height: 200px; object-fit: cover;" 
-                                alt="<?= $p['nome'] ?>">
-                            <div class="card-body bg-light">
-                                <h5 class="card-title text-primary fw-bold"><?= $p['nome'] ?> ✨</h5>
-                                <p class="card-text text-muted small"><?= mb_strimwidth($p['descricao'], 0, 100, "...") ?></p>
-                                <p class="mb-1"><span class="badge bg-success">💰 <?= number_format($p['preco'], 2, ',', '.') ?> Kz</span></p>
-                                <p class="text-secondary">📁 <em><?= $p['categoria'] ?></em></p>
-                                <button 
-                                    class="btn btn-outline-primary btn-sm btn-adicionar w-100 fw-bold"
-                                    data-id="<?= $p['id'] ?>" 
-                                    data-nome="<?= $p['nome'] ?>" 
-                                    data-preco="<?= $p['preco'] ?>"
-                                    data-imagem="http://localhost/A&Lmoda/painel/admin/uploads/<?= $p['imagem'] ?>">
-                                    ➕ Adicionar ao Carrinho
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <?php endforeach; ?>
+    <div class="row">
+        <?php foreach ($lista_produtos as $p): ?>
+        <div class="col-md-3 mb-4">
+            <div class="card shadow border-0 h-100" style="transition: transform 0.3s ease; border-radius: 20px;">
+                <img src="http://localhost/A&Lmoda/painel/admin/uploads/<?= $p['imagem'] ?>" 
+                    class="card-img-top img-fluid rounded-top" 
+                    style="height: 200px; object-fit: cover;" 
+                    alt="<?= $p['nome'] ?>">
+                <div class="card-body bg-light">
+                    <h5 class="card-title text-primary fw-bold"><?= $p['nome'] ?> ✨</h5>
+                    <p class="card-text text-muted small"><?= mb_strimwidth($p['descricao'], 0, 100, "...") ?></p>
+                    <p class="mb-1"><span class="badge bg-success">💰 <?= number_format($p['preco'], 2, ',', '.') ?> Kz</span></p>
+                    <p class="text-secondary">📁 <em><?= $p['categoria'] ?></em></p>
+                    <button 
+                        class="btn btn-outline-primary btn-sm btn-adicionar w-100 fw-bold"
+                        data-id="<?= $p['id'] ?>" 
+                        data-nome="<?= $p['nome'] ?>" 
+                        data-preco="<?= $p['preco'] ?>"
+                        data-imagem="http://localhost/A&Lmoda/painel/admin/uploads/<?= $p['imagem'] ?>">
+                        ➕ Adicionar ao Carrinho
+                    </button>
                 </div>
             </div>
-            <?php endforeach; ?>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselProdutos" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon bg-dark rounded" aria-hidden="true"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselProdutos" data-bs-slide="next">
-            <span class="carousel-control-next-icon bg-dark rounded" aria-hidden="true"></span>
-        </button>
+        <?php endforeach; ?>
     </div>
 </div>
 

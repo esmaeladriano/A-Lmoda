@@ -25,18 +25,7 @@ $produtosDestaque = $consulta->fetch_all(MYSQLI_ASSOC);
         <div class="carousel-item <?= $index == 0 ? 'active' : '' ?>">
             <img src="http://localhost/A&Lmoda/painel/admin/uploads/<?= $produto['imagem'] ?>" class="d-block w-100"
                 alt="<?= $produto['nome'] ?>" style="height: 500px; object-fit: cover;">
-            <div class="carousel-caption d-none d-md-block animate__animated animate__fadeInUp bg-dark bg-opacity-50 p-3 rounded">
-                <h5 class="fw-bold text-warning">✨ <?= $produto['nome'] ?></h5>
-                <p><?= mb_strimwidth($produto['descricao'], 0, 100, '...') ?></p>
-                <p><strong class="text-light">💰 <?= number_format($produto['preco'], 2, ',', '.') ?> Kz</strong></p>
-                <button class="btn btn-success btn-sm btn-adicionar" 
-                        data-id="<?= $produto['id'] ?>"
-                        data-nome="<?= $produto['nome'] ?>"
-                        data-preco="<?= $produto['preco'] ?>"
-                        data-imagem="<?= $produto['imagem'] ?>">
-                    🛒 Adicionar ao Carrinho
-                </button>
-            </div>
+           
         </div>
         <?php endforeach; ?>
     </div>

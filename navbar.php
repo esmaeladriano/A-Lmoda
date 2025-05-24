@@ -67,41 +67,24 @@ if (isset($_SESSION['usuario_id'])) {
 <!-- SEGUNDA NAVEGAÇÃO -->
 <nav class="bg-dark">
     <ul class="nav justify-content-center ">
+      
         <li class="nav-item">
-            <a class="nav-link text-white" href="">
-                <i class="bi bi-house-door-fill"></i> 🏠 Home
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-white" href="./beleza.php">
+            <a class="nav-link text-white" href="#beleza">
                 <i class="bi bi-lipstick"></i> 💄 Beleza
             </a>
         </li>
+    
         <li class="nav-item">
-            <a class="nav-link text-white" href="./bousa.php">
-                <i class="bi bi-bag"></i> 👜 Bolsa
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-white" href="./sapato.php">
+            <a class="nav-link text-white" href="#sapato">
                 <i class="bi bi-shoe-print"></i> 👠 Sapato
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-white" href="./saia.php">
+            <a class="nav-link text-white" href="#saia">
                 <i class="bi bi-dress"></i> 👗 Saias
             </a>
         </li>
-        <li class="nav-item">
-            <a class="nav-link text-white" href="./calças.php">
-                <i class="bi bi-file-earmark"></i> 👗 Vestido
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link text-white" href="./blusa.php">
-                <i class="bi bi-shirt"></i> 👚 Blusas
-            </a>
-        </li>
+     
     </ul>
 </nav>
 
