@@ -2,10 +2,10 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">🛍️ A&L Moda - Admin</a>
+    <a class="navbar-brand" href="#">🛍️ A&L Moda -  <?=  $_SESSION['usuario_nome'] ?></a>
 
     <div class="ms-auto text-white me-3 d-none d-md-block">
-      👤 <?= isset($_SESSION['nome_usuario']) ? $_SESSION['nome_usuario'] : 'Usuário' ?>
+      <?=  $_SESSION['email'] ?>
     </div>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
