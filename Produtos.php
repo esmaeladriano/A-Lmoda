@@ -22,7 +22,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["acao"]) && $_POST["ac
 
 $produtos = $conn->query("SELECT p.id, p.nome, p.descricao, p.preco, p.imagem, c.nome AS categoria FROM produtos p 
 JOIN categorias c ON p.categoria_id = c.id 
-WHERE destaque <> 1
+WHERE destaque = 1
 ORDER BY p.data_adicao DESC
 limit 4");
 
@@ -43,20 +43,22 @@ while($p = $produtos->fetch_assoc()) {
 <body class="bg-light">
 
 <div class="container py-5">
-    <h2 class="text-center mb-4">🛍️ Produtos Disponíveis</h2>
+    <h2 class="text-center mb-4">🛍️ Produtos Em Destaque</h2>
     <div class="row">
         <?php foreach ($lista_produtos as $p): ?>
         <div class="col-md-3 mb-4">
             <div class="card shadow border-0 h-100" style="transition: transform 0.3s ease; border-radius: 20px;">
                 <img src="http://localhost/A&Lmoda/painel/admin/uploads/<?= $p['imagem'] ?>" 
                     class="card-img-top img-fluid rounded-top" 
-                    style="height: 200px; object-fit: cover;" 
+                    style="height: 247px; object-fit: cover;" 
                     alt="<?= $p['nome'] ?>">
                 <div class="card-body bg-light">
                     <h5 class="card-title text-primary fw-bold"><?= $p['nome'] ?> ✨</h5>
                     <p class="card-text text-muted small"><?= mb_strimwidth($p['descricao'], 0, 100, "...") ?></p>
-                    <p class="mb-1"><span class="badge bg-success">💰 <?= number_format($p['preco'], 2, ',', '.') ?> Kz</span></p>
-                    <p class="text-secondary">📁 <em><?= $p['categoria'] ?></em></p>
+                    <p class="mb-1">
+                        <span class="badge bg-success">💰 <?= number_format($p['preco'], 2, ',', '.') ?> Kz</span>
+                    </p>
+                    <p class="text-secondary">📁 <em><?= $p['categoria'] ?></em></p> 
                     <button 
                         class="btn btn-outline-primary btn-sm btn-adicionar w-100 fw-bold"
                         data-id="<?= $p['id'] ?>" 
@@ -84,7 +86,10 @@ while($p = $produtos->fetch_assoc()) {
         <form id="formCarrinho">
           <input type="hidden" id="produto_id">
           <p><strong id="produto_nome"></strong></p>
-          <img id="produto_imagem" src="" class="img-fluid rounded mb-3" style="max-height: 200px;">
+          <center>
+          <img id="produto_imagem" src="" class="img-fluid rounded mb-3" style="max-width: 50%;">
+          </center>
+          
           <p>Preço unitário: <span id="produto_preco"></span> Kz</p>
 
           <div class="mb-3">
@@ -144,6 +149,8 @@ $('#formCarrinho').submit(function (e) {
         const r = JSON.parse(res);
         if (r.status === 'sucesso') {
             alert('✅ Produto adicionado ao carrinho!');
+            window.location.href="http://localhost/A&Lmoda/";
+
             bootstrap.Modal.getInstance(document.getElementById('modalCarrinho')).hide();
         } else {
             alert('Erro: ' + r.mensagem);

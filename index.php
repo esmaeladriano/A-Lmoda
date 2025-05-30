@@ -21,7 +21,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 </head>
 
-<body>
+<body class="cor-fundo">
 
     <?php
     include_once('./navbar.php');
@@ -39,7 +39,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
     <!-----------------------------------brands----------------------------->
     <div class="brands container my-5">
-        <h2 class="text-center mb-4">🛒 Nossas Marcas</h2>
+        <h2 class="text-center mb-4"> Patrocino</h2>
         <div class="small-container">
             <div class="brand-slider position-relative">
                 <div class="row flex-nowrap overflow-auto" id="brandSlider" style="scroll-behavior: smooth;">
@@ -80,19 +80,23 @@ if (session_status() === PHP_SESSION_NONE) {
         </div>
     </div>
     <style>
+        body{
+            
+            background-color: #ffffff;
+        }
         .brand-slider {
             position: relative;
         }
         .brand-item {
-            min-width: 140px;
+            min-width: 140px;000
             max-width: 180px;
             padding: 20px 10px;
             transition: transform 0.3s;
         }
         .brand-logo-box {
-            border: 2px solid #ff0000;
+            
             border-radius: 16px;
-            background: #fff;
+            background-color: #ffff;
             padding: 16px;
             box-shadow: 0 2px 8px rgba(224,194,23,0.08);
             transition: box-shadow 0.2s, border-color 0.2s;
@@ -109,7 +113,7 @@ if (session_status() === PHP_SESSION_NONE) {
             transition: filter 0.2s, transform 0.2s;
         }
         .brand-logo-box:hover {
-            border-color: #e0c217;
+            border-color: #00FF66;
             box-shadow: 0 4px 16px rgba(224,194,23,0.18);
         }
         .brand-logo-box:hover img {
@@ -164,11 +168,11 @@ if (session_status() === PHP_SESSION_NONE) {
     </script>
 
     <!--------------------------------------footer----------------------------------->
-    <footer class="footer mt-5 py-4" style="background: linear-gradient(90deg,rgb(224, 194, 23) 0%,rgb(199, 197, 75) 100%); color: #222;">
+    <footer class="footer mt-5 py-4 bg-secondary">
         <div class="container">
             <div class="row gy-4">
                 <div class="col-12 col-md-6 col-lg-3">
-                    <h5 class="mb-3" style="color: #ff0000;">Baixe Nosso App</h5>
+                    <h5 class="mb-3" style="color: #f7f7f7;">Baixe Nosso App</h5>
                     <p>Disponível para Android e iOS.</p>
                     <div class="d-flex gap-2">
                         <img src="./rodap.img/play-store.png" alt="Play Store" class="img-fluid" style="max-width: 110px;">
@@ -176,7 +180,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     </div>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
-                    <h5 class="mb-3" style="color: #ff0000;">Sobre</h5>
+                    <h5 class="mb-3" style="color:#f7f7f7;">Sobre</h5>
                     <div class="logo mb-2">
                         <a href="index.php" style="text-decoration: none;">
                             <div class="marca_empresa">
@@ -188,7 +192,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     <p style="font-size: 0.95rem;">Nossa missão é tornar o prazer e os benefícios da moda acessíveis a todos.</p>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
-                    <h5 class="mb-3" style="color: #ff0000;">Links Úteis</h5>
+                    <h5 class="mb-3" style="color: #f7f7f7;">Links Úteis</h5>
                     <ul class="list-unstyled">
                         <li><a href="#" class="footer-link">Cupons</a></li>
                         <li><a href="#" class="footer-link">Blog</a></li>
@@ -197,7 +201,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     </ul>
                 </div>
                 <div class="col-12 col-md-6 col-lg-3">
-                    <h5 class="mb-3" style="color: #ff0000;">Redes Sociais</h5>
+                    <h5 class="mb-3" style="color: ;">Redes Sociais</h5>
                     <ul class="list-unstyled d-flex flex-column gap-2">
                         <li><a href="https://www.facebook.com" target="_blank" class="footer-link"><i class="bi bi-facebook"></i> Facebook</a></li>
                         <li><a href="https://www.twitter.com" target="_blank" class="footer-link"><i class="bi bi-twitter"></i> Twitter</a></li>

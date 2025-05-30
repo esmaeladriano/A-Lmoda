@@ -8040,6 +8040,7 @@ textarea.form-control-lg {
 
 .text-center {
   text-align: center !important;
+  margin-top: 12px;
 }
 
 .text-decoration-none {

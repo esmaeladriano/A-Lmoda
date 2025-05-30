@@ -3,7 +3,7 @@
 include 'conexao.php';
 
 // Busca os produtos em destaque
-$consulta = $conn->query("SELECT * FROM produtos WHERE destaque = 1 ORDER BY data_adicao DESC LIMIT 5");
+$consulta = $conn->query("SELECT * FROM produtos_baner ORDER BY data_adicao DESC LIMIT 5");
 $produtosDestaque = $consulta->fetch_all(MYSQLI_ASSOC);
 ?>
 

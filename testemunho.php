@@ -6,7 +6,7 @@
 }
 .testimonial1-card {
     animation: fadeIn 1s;
-    background: #fff;
+    background: #dcdcdc;
     border-radius: 12px;
     box-shadow: 0 2px 12px rgba(0,0,0,0.07);
     padding: 24px 18px;
@@ -27,7 +27,7 @@
 }
 </style>
 
-<div class="testimonial1 container justify-content-center">
+<div class="testimonial1 container justify-content-center"  style="margin-top: 5rem">
     <h2 class="text-center mb-4">💬 O que nossos clientes dizem</h2>
     <div class="small-container">
         <div class="row justify-content-center">

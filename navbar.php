@@ -1,3 +1,12 @@
+
+<style>
+.cor-fundo{
+    background-color: #fff;
+}
+
+
+</style>
+
 <?php
 // session_start();
 include_once('C:\xampp\htdocs\A&Lmoda\conexao.php');
@@ -20,7 +29,7 @@ if (isset($_SESSION['usuario_id'])) {
 ?>
 
 <!-- BARRA DE ÍCONES -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between px-4 shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-light bg-secondary justify-content-between px-4 shadow-sm">
     <div class="d-flex align-items-center gap-3">
         <i class="bi bi-facebook" style="font-size: 25px;"></i> <!-- Ícone Facebook -->
         <i class="bi bi-instagram" style="font-size: 25px;"></i> <!-- Ícone Instagram -->
@@ -35,8 +44,8 @@ if (isset($_SESSION['usuario_id'])) {
             <a href="./login/exit.php" class="btn btn-danger btn-sm">Sair</a>
         <?php else: ?>
             <a href="./cadastro/"
-                class="btn btn-outline-primary btn-sm rounded-pill px-4 py-2">Cadastro</a>
-            <a href="./login/" class="btn btn-outline-secondary btn-sm rounded-pill px-4 py-2">Login</a>
+                class="btn btn-primary btn-sm rounded-pill px-4 py-2">Cadastro</a>
+            <a href="./login/" class="btn btn-primary btn-sm rounded-pil btn-sm rounded-pill px-4 py-2">Login</a>
         <?php endif; ?>
     </div>
 </nav>
@@ -49,7 +58,7 @@ if (isset($_SESSION['usuario_id'])) {
         <div class="position-relative w-50">
             <input type="text" id="search-bar" class="form-control rounded-pill px-4 py-3" placeholder="🔍 Pesquise aqui...">
             <span class="position-absolute top-50 end-0 translate-middle-y pe-3">
-                <button class="btn btn-warning rounded-circle">
+                <button class="btn btn-secondary rounded-circle">
                     <i class="bi bi-search"></i>
                 </button>
             </span>
@@ -57,7 +66,7 @@ if (isset($_SESSION['usuario_id'])) {
         </div>
 
 
-        <a href="carrinho.php" class="btn btn-warning rounded-pill d-flex align-items-center gap-2">
+        <a href="carrinho.php" class="btn btn-secondary rounded-pill d-flex align-items-center gap-2">
             🛒 <span class="badge bg-danger"><?= $totalItensCarrinho ?></span>
         </a>
 
@@ -65,23 +74,38 @@ if (isset($_SESSION['usuario_id'])) {
 </div>
 
 <!-- SEGUNDA NAVEGAÇÃO -->
-<nav class="bg-dark">
+<nav class="bg-secondary">
     <ul class="nav justify-content-center ">
       
+    <li class="nav-item">
+            <a class="nav-link text-white" href="#beleza">
+                <i class="bi bi-lipstick"></i> HOME
+            </a>
+        </li>
         <li class="nav-item">
             <a class="nav-link text-white" href="#beleza">
-                <i class="bi bi-lipstick"></i> 💄 Beleza
+                <i class="bi bi-lipstick"></i> BELEZA
             </a>
         </li>
     
         <li class="nav-item">
             <a class="nav-link text-white" href="#sapato">
-                <i class="bi bi-shoe-print"></i> 👠 Sapato
+                <i class="bi bi-shoe-print"></i> SAPATO
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-white" href="#saia">
-                <i class="bi bi-dress"></i> 👗 Saias
+                <i class="bi bi-dress"></i> SAIA
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="#vestido">
+                <i class="bi bi-dress"></i>  VESTIDO
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link text-white" href="#bolsa">
+                <i class="bi bi-dress"></i>  BOLSA
             </a>
         </li>
      

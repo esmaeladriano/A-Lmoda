@@ -8044,6 +8044,7 @@ textarea.form-control-lg {
 
 .text-center {
   text-align: center !important;
+  margin-top: 15px;
 }
 
 .text-decoration-none {

@@ -83,6 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .senha a:hover, .register-link a:hover {
             text-decoration: underline;
         }
+        .body{
+            background-color:#00FF66;
+        }
+       
     </style>
 </head>
 <body>
@@ -112,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <a href="#">Esqueceu a senha?</a>
                 </div>
 
-                <button type="submit" class="btn btn-primary w-100">Entrar</button>
+                <button type="submit" class="btn btn-primary  w-100">Entrar</button>
 
                 <div class="register-link mt-3 text-center">
                     <p>Não tem uma conta? <a href="../cadastro/">Cadastre-se</a></p>
