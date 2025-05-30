@@ -162,12 +162,16 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
     <!-- Nav tabs -->
     <ul class="nav nav-tabs mb-3" id="produtosTab" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtos" type="button"
-          role="tab">Produtos</button>
+      <button class="nav-link active" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtos" type="button"
+        role="tab">Produtos</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="baner-tab" data-bs-toggle="tab" data-bs-target="#baner" type="button"
-          role="tab">Produtos Banner</button>
+      <button class="nav-link" id="baner-tab" data-bs-toggle="tab" data-bs-target="#baner" type="button"
+        role="tab">Produtos Banner</button>
+      </li>
+      <li class="nav-item" role="presentation">
+      <button class="nav-link" id="destaque-tab" data-bs-toggle="tab" data-bs-target="#destaque" type="button"
+        role="tab">Produtos em Destaque</button>
       </li>
     </ul>
 
@@ -301,6 +305,72 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
           </nav>
         <?php endif; ?>
       </div>
+
+         <!-- Produtos em Destaque Tab -->
+    <div class="tab-pane fade" id="destaque" role="tabpanel">
+      <table class="table table-hover table-bordered align-middle">
+      <thead class="table-dark">
+        <tr>
+        <th>#</th>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Preço</th>
+        <th>Categoria</th>
+        <th>Imagem</th>
+        <th>Destaque</th>
+        <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php
+        // Paginação Produtos em Destaque
+        $paginaDestaque = isset($_GET['pagina_destaque']) ? (int) $_GET['pagina_destaque'] : 1;
+        $limiteDestaque = 6;
+        $offsetDestaque = ($paginaDestaque - 1) * $limiteDestaque;
+        $totalDestaque = $conn->query("SELECT COUNT(*) as total FROM produtos WHERE destaque=1")->fetch_assoc()['total'];
+        $totalPaginasDestaque = ceil($totalDestaque / $limiteDestaque);
+        $produtosDestaque = $conn->query("SELECT p.*, c.nome AS categoria_nome FROM produtos p JOIN categorias c ON p.categoria_id = c.id WHERE p.destaque=1 ORDER BY p.data_adicao DESC LIMIT $offsetDestaque, $limiteDestaque");
+        while ($produto = $produtosDestaque->fetch_assoc()):
+        ?>
+        <tr>
+          <td><?= $produto['id'] ?></td>
+          <td><?= $produto['nome'] ?></td>
+          <td><?= $produto['descricao'] ?></td>
+          <td>KZ <?= number_format($produto['preco'], 2, ',', '.') ?></td>
+          <td><?= $produto['categoria_nome'] ?></td>
+          <td>
+          <?php if ($produto['imagem']): ?>
+            <img src="uploads/<?= $produto['imagem'] ?>" alt="Imagem" width="50">
+          <?php else: ?>
+            <em>Sem imagem</em>
+          <?php endif; ?>
+          </td>
+          <td><?= $produto['destaque'] ? 'Sim' : 'Não' ?></td>
+          <td>
+          <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditProduto"
+            onclick="editarProduto(<?= $produto['id'] ?>)">Editar</button>
+          <form method="POST" class="d-inline">
+            <input type="hidden" name="id" value="<?= $produto['id'] ?>">
+            <button type="submit" name="delete_produto" class="btn btn-sm btn-danger"
+            onclick="return confirm('Deseja excluir este produto?')">Excluir</button>
+          </form>
+          </td>
+        </tr>
+        <?php endwhile; ?>
+      </tbody>
+      </table>
+      <?php if ($totalPaginasDestaque > 1): ?>
+      <nav>
+        <ul class="pagination">
+        <?php for ($i = 1; $i <= $totalPaginasDestaque; $i++): ?>
+          <li class="page-item <?= $i == $paginaDestaque ? 'active' : '' ?>">
+          <a class="page-link" href="?pagina_destaque=<?= $i ?>#destaque"><?= $i ?></a>
+          </li>
+        <?php endfor; ?>
+        </ul>
+      </nav>
+      <?php endif; ?>
+    </div>
     </div>
   </div>
 
