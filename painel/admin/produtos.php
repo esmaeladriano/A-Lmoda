@@ -2,6 +2,7 @@
 include_once('C:\xampp\htdocs\A&Lmoda\conexao.php');
 session_start();
 
+
 // CADASTRAR PRODUTO
 if (isset($_POST['add_produto'])) {
   $nome = trim($_POST['nome']);
@@ -50,7 +51,6 @@ if (isset($_POST['add_produto'])) {
 
   echo "<script>alert('✅ Produto adicionado com sucesso!'); window.location.href='produtos.php';</script>";
 }
-
 
 
 // CADASTRAR PRODUTO_Destaque
@@ -111,12 +111,26 @@ if (isset($_POST['edit_produto'])) {
   $destaque = isset($_POST['destaque']) ? 1 : 0;
   $imagem_nome = $_POST['imagem_atual'];  // Manter a imagem atual, caso não altere
 
-  // Verificar se uma nova imagem foi enviada
+  // Verificar se uma imagem foi enviada
   if ($_FILES['imagem']['error'] == 0) {
-    $ext = pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION);
+    $ext = strtolower(pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION));
+    $allowed_ext = ['jpg', 'jpeg', 'png'];
+    $max_size = 10 * 1024 * 1024; // 10MB
+
+    if (!in_array($ext, $allowed_ext)) {
+      echo "<script>alert('❗ Apenas arquivos JPG, JPEG ou PNG são permitidos.'); window.location.href='produtos.php';</script>";
+      exit;
+    }
+
+    if ($_FILES['imagem']['size'] > $max_size) {
+      echo "<script>alert('❗ O tamanho máximo da imagem é 10MB.'); window.location.href='produtos.php';</script>";
+      exit;
+    }
+
     $imagem_nome = uniqid() . "." . $ext;
     move_uploaded_file($_FILES['imagem']['tmp_name'], "uploads/" . $imagem_nome);
   }
+
 
   // Atualizar produto no banco
   $stmt = $conn->prepare("UPDATE produtos SET nome=?, descricao=?, preco=?, categoria_id=?, imagem=?, destaque=? WHERE id=?");
@@ -126,18 +140,61 @@ if (isset($_POST['edit_produto'])) {
   echo "<script>alert('✅ Produto atualizado com sucesso!'); window.location.href='produtos.php';</script>";
 }
 
+// EDITAR PRODUTO_Banner
+if (isset($_POST['edit_produto_banner'])) {
+  $id = $_POST['id'];
+  $nome = trim($_POST['nome']);
+  $descricao = trim($_POST['descricao']);
+  $preco = $_POST['preco'];
+  $categoria_id = $_POST['categoria_id'];
+  $imagem_nome = $_POST['imagem_atual'];  // Manter a imagem atual, caso não altere
+
+  // Verificar se uma imagem foi enviada
+  if ($_FILES['imagem']['error'] == 0) {
+    $ext = strtolower(pathinfo($_FILES['imagem']['name'], PATHINFO_EXTENSION));
+    $allowed_ext = ['jpg', 'jpeg', 'png'];
+    $max_size = 10 * 1024 * 1024; // 10MB
+
+    if (!in_array($ext, $allowed_ext)) {
+      echo "<script>alert('❗ Apenas arquivos JPG, JPEG ou PNG são permitidos.'); window.location.href='produtos.php';</script>";
+      exit;
+    }
+
+    if ($_FILES['imagem']['size'] > $max_size) {
+      echo "<script>alert('❗ O tamanho máximo da imagem é 10MB.'); window.location.href='produtos.php';</script>";
+      exit;
+    }
+
+    $imagem_nome = uniqid() . "." . $ext;
+    move_uploaded_file($_FILES['imagem']['tmp_name'], "uploads/" . $imagem_nome);
+  }
+
+
+  // Atualizar produto no banco
+  $stmt = $conn->prepare("UPDATE produtos_baner SET nome=?, descricao=?, preco=?, categoria_id=?, imagem=? WHERE id=?");
+  $stmt->bind_param("ssdisi", $nome, $descricao, $preco, $categoria_id, $imagem_nome, $id);
+  $stmt->execute();
+
+  echo "<script>alert('✅ Produto do Baner atualizado com sucesso!'); window.location.href='produtos.php';</script>";
+}
+
 // EXCLUIR PRODUTO
 if (isset($_POST['delete_produto'])) {
   $id = $_POST['id'];
   $conn->query("DELETE FROM produtos WHERE id=$id");
   echo "<script>alert('🗑 Produto excluído.'); window.location.href='produtos.php';</script>";
 }
+if (isset($_POST['delete_produto_banner'])) {
+  $id = $_POST['id'];
+  $conn->query("DELETE FROM produtos_baner WHERE id=$id");
+  echo "<script>alert('🗑 Produto excluído do Baner.'); window.location.href='produtos.php';</script>";
+}
 
 // LISTAR PRODUTOS
-$categorias1 = $conn->query("SELECT * FROM categorias ORDER BY nome ASC limit 10");
+$categorias1 = $conn->query("SELECT * FROM categorias");
 
 
-$categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
+$categorias = $conn->query("SELECT * FROM categorias ");
 ?>
 
 <!DOCTYPE html>
@@ -151,16 +208,11 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
 
 <body class="bg-light">
   <?php include_once('./navbar.php'); ?>
-  <div class="main-content" style="margin-top: 56px;">
-    <div class="d-flex justify-content-between mb-3">
-      <h3><i class="fas fa-box"></i> Produtos</h3>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProdutoBanner">+ Produto
-        Banner</button>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProduto">+ Novo Produto</button>
-    </div>
+  <div class="main-content" style="margin-top: 40px;">
+
 
     <!-- Nav tabs -->
-    <ul class="nav nav-tabs mb-3" id="produtosTab" role="tablist">
+    <ul class="nav nav-tabs mb-1" id="produtosTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtos" type="button"
           role="tab">Produtos</button>
@@ -173,6 +225,11 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
         <button class="nav-link" id="destaque-tab" data-bs-toggle="tab" data-bs-target="#destaque" type="button"
           role="tab">Produtos em Destaque</button>
       </li>
+      <div class="d-flex justify-content-end mb-1 ms-5">
+        <button class="btn btn-primary mx-5" data-bs-toggle="modal" data-bs-target="#modalProdutoBanner">+ Produto
+          Banner</button>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalProduto">+ Novo Produto</button>
+      </div>
     </ul>
 
     <div class="tab-content" id="produtosTabContent">
@@ -271,7 +328,7 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
                 <td><?= $produto['id'] ?></td>
                 <td><?= $produto['nome'] ?></td>
                 <td><?= $produto['descricao'] ?></td>
-                <td>KZ <?= number_format($produto['preco'], 2, ',', '.') ?></td>
+                <td><?php echo 'KZ ' . $produto['preco']; ?></td>
                 <td><?= $produto['categoria_nome'] ?></td>
                 <td>
                   <?php if ($produto['imagem']): ?>
@@ -281,11 +338,11 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
                   <?php endif; ?>
                 </td>
                 <td>
-                  <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalProdutoBanner"
-                    onclick="editarProduto(<?= $produto['id'] ?>)">Editar</button>
+                  <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditProdutoBanner"
+                    onclick="editarProdutoBanner(<?= $produto['id'] ?>)">Editar</button>
                   <form method="POST" class="d-inline">
                     <input type="hidden" name="id" value="<?= $produto['id'] ?>">
-                    <button type="submit" name="delete_produto" class="btn btn-sm btn-danger"
+                    <button type="submit" name="delete_produto_banner" class="btn btn-sm btn-danger"
                       onclick="return confirm('Deseja excluir este produto?')">Excluir</button>
                   </form>
                 </td>
@@ -305,6 +362,7 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
           </nav>
         <?php endif; ?>
       </div>
+
 
       <!-- Produtos em Destaque Tab -->
       <div class="tab-pane fade" id="destaque" role="tabpanel">
@@ -412,36 +470,74 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
 
   <!-- Modal Adicionar Produto Banner -->
   <div class="modal fade" id="modalProdutoBanner" tabindex="-1">
-   
+
     <div class="modal-dialog">
       <form class="modal-content" method="POST" enctype="multipart/form-data">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title">Cadastrar Produto Banner  </h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <input type="text" name="nome" class="form-control mb-2" placeholder="Nome do produto" required>
-        <textarea name="descricao" class="form-control mb-2" placeholder="Descrição do produto"></textarea>
-        <input type="number" name="preco" class="form-control mb-2" placeholder="Preço" required>
-        <select name="categoria_id" class="form-control mb-2" required>
-        <option value="">Selecione a Categoria</option>
-        <?php
-        $categorias1Modal = $conn->query("SELECT * FROM categorias ORDER BY nome ASC LIMIT 10");
-        while ($categoria1 = $categorias1Modal->fetch_assoc()):
-          ?>
-          <option value="<?= $categoria1['id'] ?>"><?= $categoria1['nome'] ?></option>
-        <?php endwhile; ?>
-        </select>
-        <label class="form-label">Imagem (obrigatória)</label>
-        <input type="file" name="imagem" class="form-control mb-2" required>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" name="add_baner" class="btn btn-primary">Salvar</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-      </div>
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Cadastrar Produto Banner </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" name="nome" class="form-control mb-2" placeholder="Nome do produto" required>
+          <textarea name="descricao" class="form-control mb-2" placeholder="Descrição do produto"></textarea>
+          <input type="number" name="preco" class="form-control mb-2" placeholder="Preço" required>
+          <select name="categoria_id" class="form-control mb-2" required>
+            <option value="">Selecione a Categoria</option>
+            <?php
+            $categorias1Modal = $conn->query("SELECT * FROM categorias ORDER BY nome ASC LIMIT 10");
+            while ($categoria1 = $categorias1Modal->fetch_assoc()):
+              ?>
+              <option value="<?= $categoria1['id'] ?>"><?= $categoria1['nome'] ?></option>
+            <?php endwhile; ?>
+          </select>
+          <label class="form-label">Imagem (obrigatória)</label>
+          <input type="file" name="imagem" class="form-control mb-2" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" name="add_baner" class="btn btn-primary">Salvar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
       </form>
     </div>
-   
+
+  </div>
+
+
+  <!-- Modal Editar Produto Banner -->
+  <div class="modal fade" id="modalEditProdutoBanner" tabindex="-1">
+    <div class="modal-dialog">
+      <form class="modal-content" method="POST" enctype="multipart/form-data">
+        <div class="modal-header bg-warning text-white">
+          <h5 class="modal-title">Editar Produto Banner</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="id" id="edit_banner_id">
+          <input type="text" name="nome" id="edit_banner_nome" class="form-control mb-2" placeholder="Nome do produto"
+            required>
+          <textarea name="descricao" id="edit_banner_descricao" class="form-control mb-2"
+            placeholder="Descrição do produto"></textarea>
+          <input type="number" name="preco" id="edit_banner_preco" class="form-control mb-2" placeholder="Preço"
+            required>
+          <select name="categoria_id" id="edit_banner_categoria_id" class="form-control mb-2" required>
+            <option value="">Selecione a Categoria</option>
+            <?php
+            $categoriasBannerEdit = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
+            while ($categoria = $categoriasBannerEdit->fetch_assoc()):
+              ?>
+              <option value="<?= $categoria['id'] ?>"><?= $categoria['nome'] ?></option>
+            <?php endwhile; ?>
+          </select>
+          <label class="form-label">Imagem (opcional)</label>
+          <input type="file" name="imagem" id="edit_banner_imagem" class="form-control mb-2">
+          <input type="hidden" name="imagem_atual" id="edit_banner_imagem_atual">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" name="edit_produto_banner" class="btn btn-warning">Atualizar</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <!-- Modal Editar Produto -->
@@ -483,26 +579,50 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
       </form>
     </div>
   </div>
-  <!-- Modal Editar Produto Banner-->
-   
+
+
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    function editarProdutoBanner(id) {
+      $.ajax({
+        url: 'http://localhost/A&Lmoda/painel/admin/editar_produto_banner.php',
+        type: 'GET',
+        data: { id: id },
+        dataType: 'json',
+        success: function (data) {
+          $('#edit_banner_id').val(data.id);
+          $('#edit_banner_nome').val(data.nome);
+          $('#edit_banner_descricao').val(data.descricao);
+          $('#edit_banner_preco').val(data.preco);
+          $('#edit_banner_categoria_id').val(data.categoria_id);
+          $('#edit_banner_imagem_atual').val(data.imagem);
+        }
+      });
+    }
+  </script>
+
 
   <script>
     function editarProduto(id) {
-      // Carregar os dados do produto no modal
-      fetch('editar_produto.php?id=' + id)
-        .then(response => response.json())
-        .then(data => {
-          document.getElementById('edit_id').value = data.id;
-          document.getElementById('edit_nome').value = data.nome;
-          document.getElementById('edit_descricao').value = data.descricao;
-          document.getElementById('edit_preco').value = data.preco;
-          document.getElementById('edit_categoria_id').value = data.categoria_id;
-          document.getElementById('edit_imagem_atual').value = data.imagem;
-          document.getElementById('edit_destaque').checked = data.destaque;
-        });
+      $.ajax({
+        url: 'http://localhost/A&Lmoda/painel/admin/editar_produto.php',
+        type: 'GET',
+        data: { id: id },
+        dataType: 'json',
+        success: function (data) {
+          $('#edit_id').val(data.id);
+          $('#edit_nome').val(data.nome);
+          $('#edit_descricao').val(data.descricao);
+          $('#edit_preco').val(data.preco);
+          $('#edit_categoria_id').val(data.categoria_id);
+          $('#edit_imagem_atual').val(data.imagem);
+          $('#edit_destaque').prop('checked', data.destaque == 1);
+
+        }
+      });
     }
   </script>
 </body>
