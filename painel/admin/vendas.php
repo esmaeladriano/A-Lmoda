@@ -158,10 +158,10 @@ while ($row = $res->fetch_assoc()) {
                 </div>
               </div>
 
-              <h6>Itens</h6>
+
               <div id="itens-container"></div>
-              <button type="button" class="btn btn-secondary mt-2" onclick="addItem()" id="add-produto-btn">➕
-                Produto</button>
+              <button type="button" class="btn btn-secondary mt-2" onclick="addItem()" id="add-produto-btn">➕Produto</button>
+              <!-- Vais -->
 
             </div>
             <div class="modal-footer">
@@ -176,6 +176,7 @@ while ($row = $res->fetch_assoc()) {
     <template id="item-template">
       <div class="row mb-2 item-produto">
         <div class="col">
+          <label for="id_produto">Produto</label>
           <select class="form-control produto-select" required>
             <option value="">Produto</option>
             <?php foreach ($produtos as $p): ?>
@@ -184,41 +185,54 @@ while ($row = $res->fetch_assoc()) {
             <?php endforeach; ?>
           </select>
         </div>
-        <div class="col"><input type="number" name="quantidade" id="quantidade" min="1" class="form-control" placeholder="Qtd" required>
-        </div>
-        <div class="col"><input type="number" step="0.01" name="preco_unitario" class="form-control" placeholder="Preço"
-            required readonly></div>
         <div class="col">
-            <input type="number" name="total_produto" class="form-control" placeholder="Total" readonly disabled>
-            <script>
-            // Atualiza o total do produto ao mudar quantidade ou preço
-            document.addEventListener('DOMContentLoaded', function () {
-              const item = document.currentScript.closest('.item-produto');
-              const qtdInput = item.querySelector('[name="quantidade"]');
-              const precoInput = item.querySelector('[name="preco_unitario"]');
-              const totalInput = item.querySelector('[name="total_produto"]');
-
-              function atualizarTotal() {
-              const qtd = parseFloat(qtdInput.value) || 0;
-              const preco = parseFloat(precoInput.value) || 0;
-              totalInput.value = (qtd * preco).toFixed(2);
-              }
-
-              qtdInput.addEventListener('input', atualizarTotal);
-              precoInput.addEventListener('input', atualizarTotal);
-            });
-            </script>
+          <label for="quantidade">Quantidade</label>
+          <input type="number" name="quantidade" min="1" class="form-control quantidade-input" placeholder="Qtd"
+            required>
         </div>
-        <script>
-          // Atualiza o total do produto ao mudar quantidade ou preço usando jQuery
-        
-        </script>
-
-        <div class="col-auto">
+        <div class="col">
+          <label for="preco_unitario">Preço</label>
+          <input type="number" step="0.01" name="preco_unitario" class="form-control preco-input" placeholder="Preço"
+            required readonly>
+        </div>
+        <div class="col">
+          <label for="total_produto">Total</label>
+          <input type="number" name="total_produto" class="form-control total-input" readonly>
+        </div>
+        <div class="col">
+          <br>
           <button type="button" class="btn btn-danger" onclick="this.closest('.item-produto').remove()">✖</button>
         </div>
       </div>
     </template>
+
+    <script>
+      // Função para calcular o total do item
+      function calcularTotalItem(itemRow) {
+        const qtdInput = itemRow.querySelector('.quantidade-input');
+        const precoInput = itemRow.querySelector('.preco-input');
+        const totalInput = itemRow.querySelector('.total-input');
+        const quantidade = parseFloat(qtdInput.value) || 0;
+        const preco = parseFloat(precoInput.value) || 0;
+        totalInput.value = (quantidade * preco).toFixed(2);
+      }
+
+      // Evento delegado para inputs de quantidade
+      document.addEventListener('input', function (e) {
+        if (e.target.classList.contains('quantidade-input')) {
+          const itemRow = e.target.closest('.item-produto');
+          calcularTotalItem(itemRow);
+        }
+      });
+
+      // Também calcula ao alterar o preço (caso necessário)
+      document.addEventListener('input', function (e) {
+        if (e.target.classList.contains('preco-input')) {
+          const itemRow = e.target.closest('.item-produto');
+          calcularTotalItem(itemRow);
+        }
+      });
+    </script>
 
     <script>
       function addItem() {
