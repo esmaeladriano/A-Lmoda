@@ -14,17 +14,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   if (!$conn) {
     $response = ['status' => 'error', 'message' => 'Erro de conexão com o banco!'];
   } else {
-    $check = mysqli_query($conn, "SELECT id FROM usuarios WHERE email = '$email' LIMIT 1");
-    if (mysqli_num_rows($check) > 0) {
+    // Use prepared statement to prevent SQL injection
+    $stmt = mysqli_prepare($conn, "SELECT id FROM usuarios WHERE email = ? LIMIT 1");
+    mysqli_stmt_bind_param($stmt, "s", $email);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
+    if (mysqli_stmt_num_rows($stmt) > 0) {
       $response = ['status' => 'warning', 'message' => '⚠️ Este email já está em uso!'];
     } else {
-      $sql = "INSERT INTO usuarios (nome, email, senha, tipo) VALUES ('$nome', '$email', '$senha', '$nivel')";
-      if (mysqli_query($conn, $sql)) {
+      $stmt_insert = mysqli_prepare($conn, "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (?, ?, ?, ?)");
+      mysqli_stmt_bind_param($stmt_insert, "ssss", $nome, $email, $senha, $nivel);
+      if (mysqli_stmt_execute($stmt_insert)) {
         $response = ['status' => 'success', 'message' => '✅ Usuário cadastrado com sucesso!'];
       } else {
         $response = ['status' => 'error', 'message' => '❌ Erro ao cadastrar usuário!'];
       }
+      mysqli_stmt_close($stmt_insert);
     }
+    mysqli_stmt_close($stmt);
     mysqli_close($conn);
   }
 }
