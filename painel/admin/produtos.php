@@ -162,16 +162,16 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
     <!-- Nav tabs -->
     <ul class="nav nav-tabs mb-3" id="produtosTab" role="tablist">
       <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtos" type="button"
-        role="tab">Produtos</button>
+        <button class="nav-link active" id="produtos-tab" data-bs-toggle="tab" data-bs-target="#produtos" type="button"
+          role="tab">Produtos</button>
       </li>
       <li class="nav-item" role="presentation">
-      <button class="nav-link" id="baner-tab" data-bs-toggle="tab" data-bs-target="#baner" type="button"
-        role="tab">Produtos Banner</button>
+        <button class="nav-link" id="baner-tab" data-bs-toggle="tab" data-bs-target="#baner" type="button"
+          role="tab">Produtos Banner</button>
       </li>
       <li class="nav-item" role="presentation">
-      <button class="nav-link" id="destaque-tab" data-bs-toggle="tab" data-bs-target="#destaque" type="button"
-        role="tab">Produtos em Destaque</button>
+        <button class="nav-link" id="destaque-tab" data-bs-toggle="tab" data-bs-target="#destaque" type="button"
+          role="tab">Produtos em Destaque</button>
       </li>
     </ul>
 
@@ -281,7 +281,7 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
                   <?php endif; ?>
                 </td>
                 <td>
-                  <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditProduto"
+                  <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalProdutoBanner"
                     onclick="editarProduto(<?= $produto['id'] ?>)">Editar</button>
                   <form method="POST" class="d-inline">
                     <input type="hidden" name="id" value="<?= $produto['id'] ?>">
@@ -306,71 +306,71 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
         <?php endif; ?>
       </div>
 
-         <!-- Produtos em Destaque Tab -->
-    <div class="tab-pane fade" id="destaque" role="tabpanel">
-      <table class="table table-hover table-bordered align-middle">
-      <thead class="table-dark">
-        <tr>
-        <th>#</th>
-        <th>Nome</th>
-        <th>Descrição</th>
-        <th>Preço</th>
-        <th>Categoria</th>
-        <th>Imagem</th>
-        <th>Destaque</th>
-        <th>Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php
-        // Paginação Produtos em Destaque
-        $paginaDestaque = isset($_GET['pagina_destaque']) ? (int) $_GET['pagina_destaque'] : 1;
-        $limiteDestaque = 6;
-        $offsetDestaque = ($paginaDestaque - 1) * $limiteDestaque;
-        $totalDestaque = $conn->query("SELECT COUNT(*) as total FROM produtos WHERE destaque=1")->fetch_assoc()['total'];
-        $totalPaginasDestaque = ceil($totalDestaque / $limiteDestaque);
-        $produtosDestaque = $conn->query("SELECT p.*, c.nome AS categoria_nome FROM produtos p JOIN categorias c ON p.categoria_id = c.id WHERE p.destaque=1 ORDER BY p.data_adicao DESC LIMIT $offsetDestaque, $limiteDestaque");
-        while ($produto = $produtosDestaque->fetch_assoc()):
-        ?>
-        <tr>
-          <td><?= $produto['id'] ?></td>
-          <td><?= $produto['nome'] ?></td>
-          <td><?= $produto['descricao'] ?></td>
-          <td>KZ <?= number_format($produto['preco'], 2, ',', '.') ?></td>
-          <td><?= $produto['categoria_nome'] ?></td>
-          <td>
-          <?php if ($produto['imagem']): ?>
-            <img src="uploads/<?= $produto['imagem'] ?>" alt="Imagem" width="50">
-          <?php else: ?>
-            <em>Sem imagem</em>
-          <?php endif; ?>
-          </td>
-          <td><?= $produto['destaque'] ? 'Sim' : 'Não' ?></td>
-          <td>
-          <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditProduto"
-            onclick="editarProduto(<?= $produto['id'] ?>)">Editar</button>
-          <form method="POST" class="d-inline">
-            <input type="hidden" name="id" value="<?= $produto['id'] ?>">
-            <button type="submit" name="delete_produto" class="btn btn-sm btn-danger"
-            onclick="return confirm('Deseja excluir este produto?')">Excluir</button>
-          </form>
-          </td>
-        </tr>
-        <?php endwhile; ?>
-      </tbody>
-      </table>
-      <?php if ($totalPaginasDestaque > 1): ?>
-      <nav>
-        <ul class="pagination">
-        <?php for ($i = 1; $i <= $totalPaginasDestaque; $i++): ?>
-          <li class="page-item <?= $i == $paginaDestaque ? 'active' : '' ?>">
-          <a class="page-link" href="?pagina_destaque=<?= $i ?>#destaque"><?= $i ?></a>
-          </li>
-        <?php endfor; ?>
-        </ul>
-      </nav>
-      <?php endif; ?>
-    </div>
+      <!-- Produtos em Destaque Tab -->
+      <div class="tab-pane fade" id="destaque" role="tabpanel">
+        <table class="table table-hover table-bordered align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>#</th>
+              <th>Nome</th>
+              <th>Descrição</th>
+              <th>Preço</th>
+              <th>Categoria</th>
+              <th>Imagem</th>
+              <th>Destaque</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            // Paginação Produtos em Destaque
+            $paginaDestaque = isset($_GET['pagina_destaque']) ? (int) $_GET['pagina_destaque'] : 1;
+            $limiteDestaque = 6;
+            $offsetDestaque = ($paginaDestaque - 1) * $limiteDestaque;
+            $totalDestaque = $conn->query("SELECT COUNT(*) as total FROM produtos WHERE destaque=1")->fetch_assoc()['total'];
+            $totalPaginasDestaque = ceil($totalDestaque / $limiteDestaque);
+            $produtosDestaque = $conn->query("SELECT p.*, c.nome AS categoria_nome FROM produtos p JOIN categorias c ON p.categoria_id = c.id WHERE p.destaque=1 ORDER BY p.data_adicao DESC LIMIT $offsetDestaque, $limiteDestaque");
+            while ($produto = $produtosDestaque->fetch_assoc()):
+              ?>
+              <tr>
+                <td><?= $produto['id'] ?></td>
+                <td><?= $produto['nome'] ?></td>
+                <td><?= $produto['descricao'] ?></td>
+                <td>KZ <?= number_format($produto['preco'], 2, ',', '.') ?></td>
+                <td><?= $produto['categoria_nome'] ?></td>
+                <td>
+                  <?php if ($produto['imagem']): ?>
+                    <img src="uploads/<?= $produto['imagem'] ?>" alt="Imagem" width="50">
+                  <?php else: ?>
+                    <em>Sem imagem</em>
+                  <?php endif; ?>
+                </td>
+                <td><?= $produto['destaque'] ? 'Sim' : 'Não' ?></td>
+                <td>
+                  <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#modalEditProduto"
+                    onclick="editarProduto(<?= $produto['id'] ?>)">Editar</button>
+                  <form method="POST" class="d-inline">
+                    <input type="hidden" name="id" value="<?= $produto['id'] ?>">
+                    <button type="submit" name="delete_produto" class="btn btn-sm btn-danger"
+                      onclick="return confirm('Deseja excluir este produto?')">Excluir</button>
+                  </form>
+                </td>
+              </tr>
+            <?php endwhile; ?>
+          </tbody>
+        </table>
+        <?php if ($totalPaginasDestaque > 1): ?>
+          <nav>
+            <ul class="pagination">
+              <?php for ($i = 1; $i <= $totalPaginasDestaque; $i++): ?>
+                <li class="page-item <?= $i == $paginaDestaque ? 'active' : '' ?>">
+                  <a class="page-link" href="?pagina_destaque=<?= $i ?>#destaque"><?= $i ?></a>
+                </li>
+              <?php endfor; ?>
+            </ul>
+          </nav>
+        <?php endif; ?>
+      </div>
     </div>
   </div>
 
@@ -412,34 +412,36 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
 
   <!-- Modal Adicionar Produto Banner -->
   <div class="modal fade" id="modalProdutoBanner" tabindex="-1">
+   
     <div class="modal-dialog">
       <form class="modal-content" method="POST" enctype="multipart/form-data">
-        <div class="modal-header bg-primary text-white">
-          <h5 class="modal-title">Cadastrar Produto Banner</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body">
-          <input type="text" name="nome" class="form-control mb-2" placeholder="Nome do produto" required>
-          <textarea name="descricao" class="form-control mb-2" placeholder="Descrição do produto"></textarea>
-          <input type="number" name="preco" class="form-control mb-2" placeholder="Preço" required>
-          <select name="categoria_id" class="form-control mb-2" required>
-            <option value="">Selecione a Categoria</option>
-            <?php
-            $categorias1Modal = $conn->query("SELECT * FROM categorias ORDER BY nome ASC LIMIT 10");
-            while ($categoria1 = $categorias1Modal->fetch_assoc()):
-              ?>
-              <option value="<?= $categoria1['id'] ?>"><?= $categoria1['nome'] ?></option>
-            <?php endwhile; ?>
-          </select>
-          <label class="form-label">Imagem (obrigatória)</label>
-          <input type="file" name="imagem" class="form-control mb-2" required>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" name="add_baner" class="btn btn-primary">Salvar</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-        </div>
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Cadastrar Produto Banner  </h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <input type="text" name="nome" class="form-control mb-2" placeholder="Nome do produto" required>
+        <textarea name="descricao" class="form-control mb-2" placeholder="Descrição do produto"></textarea>
+        <input type="number" name="preco" class="form-control mb-2" placeholder="Preço" required>
+        <select name="categoria_id" class="form-control mb-2" required>
+        <option value="">Selecione a Categoria</option>
+        <?php
+        $categorias1Modal = $conn->query("SELECT * FROM categorias ORDER BY nome ASC LIMIT 10");
+        while ($categoria1 = $categorias1Modal->fetch_assoc()):
+          ?>
+          <option value="<?= $categoria1['id'] ?>"><?= $categoria1['nome'] ?></option>
+        <?php endwhile; ?>
+        </select>
+        <label class="form-label">Imagem (obrigatória)</label>
+        <input type="file" name="imagem" class="form-control mb-2" required>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" name="add_baner" class="btn btn-primary">Salvar</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+      </div>
       </form>
     </div>
+   
   </div>
 
   <!-- Modal Editar Produto -->
@@ -481,6 +483,8 @@ $categorias = $conn->query("SELECT * FROM categorias ORDER BY nome ASC");
       </form>
     </div>
   </div>
+  <!-- Modal Editar Produto Banner-->
+   
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
