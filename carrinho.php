@@ -12,7 +12,12 @@ if (!$conn) {
 
 // Verificar se o usuário está logado
 if (!isset($_SESSION['usuario_id'])) {
-    echo "<div class='alert alert-warning text-center'>Você precisa estar logado para ver o carrinho.</div>";
+    echo "
+    <script>
+        alert('Você precisa estar logado para ver o carrinho.');
+        window.location.href = 'index.php';
+    </script>
+    ";
     exit;
 }
 

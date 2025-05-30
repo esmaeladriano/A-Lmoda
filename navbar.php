@@ -53,9 +53,9 @@ if (isset($_SESSION['usuario_id'])) {
 
 <!-- LOGO E PESQUISA -->
 <div class="container-fluid py-1 text-center bg-white border-bottom shadow-lg">
-    <h5 class="mb-1 display-3 text-primary fw-bold">🛍️ A&L MODA</h5>
+    <!-- <p class="mb-1 display-6 text-primary fw-bold">🛍️ A&L MODA</p> -->
     <div class="d-flex justify-content-center gap-3 flex-wrap">
-        <div class="position-relative w-50">
+        <div class="position-relative w-50 h-25">
             <input type="text" id="search-bar" class="form-control rounded-pill px-4 py-3" placeholder="🔍 Pesquise aqui...">
             <span class="position-absolute top-50 end-0 translate-middle-y pe-3">
                 <button class="btn btn-secondary rounded-circle">
@@ -66,9 +66,11 @@ if (isset($_SESSION['usuario_id'])) {
         </div>
 
 
-        <a href="carrinho.php" class="btn btn-secondary rounded-pill d-flex align-items-center gap-2">
-            🛒 <span class="badge bg-danger"><?= $totalItensCarrinho ?></span>
-        </a>
+        <?php if (isset($_SESSION['usuario_id'])): ?>
+            <a href="carrinho.php" class="btn btn-secondary rounded-pill d-flex align-items-center gap-2">
+                🛒 <span class="badge btn-secondary"><?= $totalItensCarrinho ?></span>
+            </a>
+        <?php endif; ?>
 
     </div>
 </div>

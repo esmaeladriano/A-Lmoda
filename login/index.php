@@ -3,16 +3,29 @@ session_start();
 include_once('C:\xampp\htdocs\A&Lmoda\conexao.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['email'];
+    $email = trim($_POST['email']);
     $senha = $_POST['senha'];
 
+    // Validação básica para evitar SQL Injection e entradas inválidas
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION['error'] = "Email inválido.";
+        header("Location: http://localhost/A&Lmoda/login/");
+        exit();
+    }
+
+    // Usando prepared statements já protege contra SQL Injection
     $sql = "SELECT * FROM usuarios WHERE email = ? LIMIT 1";
     $stmt = $conn->prepare($sql);
+    if ($stmt === false) {
+        $_SESSION['error'] = "Erro no servidor. Tente novamente.";
+        header("Location: http://localhost/A&Lmoda/login/");
+        exit();
+    }
     $stmt->bind_param('s', $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
-    if ($result->num_rows > 0) {
+    if ($result && $result->num_rows > 0) {
         $usuario = $result->fetch_assoc();
 
         if (password_verify($senha, $usuario['senha'])) {
@@ -29,12 +42,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         } else {
             $_SESSION['error'] = "Email ou senha inválidos.";
-            header("Location: ");
+            header("Location: http://localhost/A&Lmoda/login/");
             exit();
         }
     } else {
-        $_SESSION['error'] = "Email ou senha inválidos.";
-        header("Location: ");
+        $_SESSION['error'] = "Usuário não existe no sistema.";
+        header("Location: http://localhost/A&Lmoda/login/");
         exit();
     }
 }
@@ -112,11 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <input type="password" name="senha" class="form-control" required>
                 </div>
 
-                <div class="senha mb-3">
-                    <a href="#">Esqueceu a senha?</a>
-                </div>
-
-                <button type="submit" class="btn btn-primary  w-100">Entrar</button>
+                <button type="submit" class="btn btn-secondary w-100">Entrar</button>
 
                 <div class="register-link mt-3 text-center">
                     <p>Não tem uma conta? <a href="../cadastro/">Cadastre-se</a></p>

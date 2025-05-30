@@ -1,10 +1,7 @@
-
 <style>
-.cor-fundo{
-    background-color: #fff;
-}
-
-
+    .cor-fundo {
+        background-color: #fff;
+    }
 </style>
 
 <?php
@@ -27,10 +24,10 @@ if (isset($_SESSION['usuario_id'])) {
     $totalItensCarrinho = $total ?? 0;
 }
 ?>
- <!-- Bootstrap 5 -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Animate.css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Animate.css -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 <!-- BARRA DE ÍCONES -->
 <nav class="navbar navbar-expand-lg navbar-light bg-secondary justify-content-between px-4 shadow-sm">
     <div class="d-flex align-items-center gap-3">
@@ -42,12 +39,12 @@ if (isset($_SESSION['usuario_id'])) {
     <div class="d-flex align-items-center gap-4">
         <?php if (!empty($_SESSION['email'])): ?>
             <span class="text-dark me-3">
-                👤 <?= isset($_SESSION['nome']) ? htmlspecialchars($_SESSION['nome']) : htmlspecialchars($_SESSION['email']) ?>
+                👤
+                <?= isset($_SESSION['nome']) ? htmlspecialchars($_SESSION['nome']) : htmlspecialchars($_SESSION['email']) ?>
             </span>
             <a href="./login/exit.php" class="btn btn-danger btn-sm">Sair</a>
         <?php else: ?>
-            <a href="./cadastro/"
-                class="btn btn-primary btn-sm rounded-pill px-4 py-2">Cadastro</a>
+            <a href="./cadastro/" class="btn btn-primary btn-sm rounded-pill px-4 py-2">Cadastro</a>
             <a href="./login/" class="btn btn-primary btn-sm rounded-pil btn-sm rounded-pill px-4 py-2">Login</a>
         <?php endif; ?>
     </div>
@@ -56,22 +53,26 @@ if (isset($_SESSION['usuario_id'])) {
 
 <!-- LOGO E PESQUISA -->
 <div class="container-fluid py-1 text-center bg-white border-bottom shadow-lg">
-    <h5 class="mb-1 display-3 text-primary fw-bold">🛍️ A&L MODA</h5>
+    <!-- <h5 class="mb-1 display-3 text-primary fw-bold">🛍️ A&L MODA</h5> -->
     <div class="d-flex justify-content-center gap-3 flex-wrap">
         <div class="position-relative w-50">
-            <input type="text" id="search-bar" class="form-control rounded-pill px-4 py-3" placeholder="🔍 Pesquise aqui...">
+            <input type="text" id="search-bar" class="form-control rounded-pill px-4 py-3"
+                placeholder="🔍 Pesquise aqui...">
             <span class="position-absolute top-50 end-0 translate-middle-y pe-3">
                 <button class="btn btn-secondary rounded-circle">
                     <i class="bi bi-search"></i>
                 </button>
             </span>
-            <div id="search-results" class="position-absolute w-100 bg-white border rounded mt-1" style="z-index: 1000; display: none;"></div>
+            <div id="search-results" class="position-absolute w-100 bg-white border rounded mt-1"
+                style="z-index: 1000; display: none;"></div>
         </div>
 
 
-        <a href="carrinho.php" class="btn btn-secondary rounded-pill d-flex align-items-center gap-2">
-            🛒 <span class="badge bg-danger"><?= $totalItensCarrinho ?></span>
-        </a>
+        <?php if (isset($_SESSION['usuario_id'])): ?>
+            <a href="carrinho.php" class="btn btn-secondary rounded-pill d-flex align-items-center gap-2">
+                🛒 <span class="badge btn-secondaryr"><?= $totalItensCarrinho ?></span>
+            </a>
+        <?php endif; ?>
 
     </div>
 </div>
@@ -79,8 +80,8 @@ if (isset($_SESSION['usuario_id'])) {
 <!-- SEGUNDA NAVEGAÇÃO -->
 <nav class="bg-secondary">
     <ul class="nav justify-content-center ">
-      
-    <li class="nav-item">
+
+        <li class="nav-item">
             <a class="nav-link text-white" href="http://localhost/A&Lmoda/">
                 <i class="bi bi-lipstick"></i> HOME
             </a>
@@ -90,7 +91,7 @@ if (isset($_SESSION['usuario_id'])) {
                 <i class="bi bi-lipstick"></i> BELEZA
             </a>
         </li>
-    
+
         <li class="nav-item">
             <a class="nav-link text-white" href="http://localhost/A&Lmoda/Sapato.php">
                 <i class="bi bi-shoe-print"></i> SAPATO
@@ -103,15 +104,15 @@ if (isset($_SESSION['usuario_id'])) {
         </li>
         <li class="nav-item">
             <a class="nav-link text-white" href="http://localhost/A&Lmoda/Vestido.php">
-                <i class="bi bi-dress"></i>  VESTIDO
+                <i class="bi bi-dress"></i> VESTIDO
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link text-white" href="http://localhost/A&Lmoda/Bolsa.php">
-                <i class="bi bi-dress"></i>  BOLSA
+                <i class="bi bi-dress"></i> BOLSA
             </a>
         </li>
-     
+
     </ul>
 </nav>
 
@@ -120,8 +121,8 @@ if (isset($_SESSION['usuario_id'])) {
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('#search-bar').on('keyup', function() {
+    $(document).ready(function () {
+        $('#search-bar').on('keyup', function () {
             let query = $(this).val().trim();
 
             if (query.length > 0) {
@@ -129,7 +130,7 @@ if (isset($_SESSION['usuario_id'])) {
                     url: 'search.php',
                     method: 'GET',
                     data: { q: query },
-                    success: function(data) {
+                    success: function (data) {
                         console.log(data);
                         try {
                             let results = JSON.parse(data);
@@ -142,7 +143,7 @@ if (isset($_SESSION['usuario_id'])) {
                             $('#search-results').html('<div class="p-2 text-danger">Error processing results.</div>').show();
                         }
                     },
-                    error: function() {
+                    error: function () {
                         $('#search-results').html('<div class="p-2 text-danger">Error fetching results.</div>').show();
                     }
                 });
@@ -152,7 +153,7 @@ if (isset($_SESSION['usuario_id'])) {
         });
 
         // Hide results when clicking outside the search bar or results container
-        $(document).on('click', function(e) {
+        $(document).on('click', function (e) {
             if (!$(e.target).closest('#search-bar, #search-results').length) {
                 $('#search-results').hide();
             }
