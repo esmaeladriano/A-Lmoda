@@ -74,40 +74,51 @@ while($p = $produtos->fetch_assoc()) {
     </div>
 </div>
 
-<!-- MODAL -->
-<div class="modal fade" id="modalCarrinho" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content p-3">
-      <div class="modal-header">
-        <h5 class="modal-title">Adicionar ao Carrinho</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+<?php
+if (isset($_SESSION['usuario_id'])) {?>
+    <!-- MODAL -->
+<!-- Modal Carrinho -->
+<div class="modal fade" id="modalCarrinho" tabindex="-1" aria-hidden="true" aria-labelledby="modalCarrinhoLabel">
+  <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content shadow-lg p-3 rounded-4">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id="modalCarrinhoLabel">Adicionar ao Carrinho</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
       </div>
-      <div class="modal-body">
-        <form id="formCarrinho">
+      <div class="modal-body text-center">
+        <form id="formCarrinho" class="needs-validation" novalidate>
           <input type="hidden" id="produto_id">
-          <p><strong id="produto_nome"></strong></p>
-          <center>
-          <img id="produto_imagem" src="" class="img-fluid rounded mb-3" style="max-width: 50%;">
-          </center>
-          
-          <p>Preço unitário: <span id="produto_preco"></span> Kz</p>
+          <p class="fs-5 text-truncate fw-semibold" id="produto_nome"></p>
 
-          <div class="mb-3">
-            <label>Quantidade</label>
-            <input type="number" id="quantidade" class="form-control" min="1" value="1">
+          <img id="produto_imagem" src="" alt="Imagem do produto" class="img-fluid rounded mb-3" style="max-width: 60%; max-height: 150px; object-fit: contain;">
+
+          <p class="mb-3"><strong>Preço unitário:</strong> <span id="produto_preco" class="text-success fs-5"></span> Kz</p>
+
+          <div class="mb-3 text-start">
+            <label for="quantidade" class="form-label fw-semibold">Quantidade</label>
+            <input type="number" id="quantidade" class="form-control form-control-lg" min="1" value="1" required>
+            <div class="invalid-feedback">Por favor, insira uma quantidade válida.</div>
           </div>
 
-          <div class="mb-3">
-            <label>Total</label>
-            <input type="text" id="total" class="form-control" readonly>
+          <div class="mb-4 text-start">
+            <label for="total" class="form-label fw-semibold">Total</label>
+            <input type="text" id="total" class="form-control form-control-lg text-success fw-bold" readonly style="background-color: #e9f7ef;">
           </div>
 
-          <button type="submit" class="btn btn-success w-100">✅ Confirmar</button>
+          <button type="submit" class="btn btn-success btn-lg w-100 fw-bold">✅ Confirmar</button>
         </form>
       </div>
     </div>
   </div>
 </div>
+<?php } else { ?>
+    <div class="alert alert-warning text-center">
+        <strong>⚠️ Atenção!</strong> Você precisa estar logado para adicionar produtos ao carrinho.
+        <a href="http://localhost/A&Lmoda/" class="btn btn-primary btn-sm">Fazer Login</a>
+    </div>
+<?php } ?>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
