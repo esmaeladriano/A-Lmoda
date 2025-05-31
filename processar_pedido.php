@@ -109,7 +109,7 @@ echo "
         '
         id='voltarBtn'
     >Voltar às compras</a>
-    <p style='margin-top: 18px; color: #888; font-size: 0.95em;'>Você será redirecionado automaticamente em 8 segundos.</p>
+    <p style='margin-top: 18px; color: #888; font-size: 0.95em;'>Você será redirecionado automaticamente em 5 segundos.</p>
 </div>
 <script>
     document.getElementById('voltarBtn').onclick = function() {
@@ -117,7 +117,7 @@ echo "
     };
     setTimeout(function() {
         window.location.href = 'index.php';
-    }, 8000);
+    }, 5000);
 </script>
 ";
 ?>

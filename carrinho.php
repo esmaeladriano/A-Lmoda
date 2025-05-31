@@ -38,7 +38,7 @@ $result = $stmt->get_result();
 // Verificar se o carrinho está vazio
 $produtos_no_carrinho = [];
 if ($result->num_rows === 0) {
-    echo "<div class='alert alert-info text-center'>Seu carrinho está vazio!</div>";
+    echo "";
 } else {
     while ($row = $result->fetch_assoc()) {
         $produtos_no_carrinho[] = $row;

@@ -40,7 +40,7 @@ include_once('conexao.php');
                     $result = $stmt->get_result();
 
                     if ($result->num_rows === 0) {
-                        echo "<div class='alert alert-info'>🛒 Seu carrinho está vazio.</div>";
+                        echo "<div class='alert alert-info text-center'>🛒 Seu carrinho está vazio.</div>";
                         exit;
                     }
 
