@@ -121,8 +121,8 @@ $marcas = $conn->query("SELECT * FROM marcas ORDER BY data_cadastro DESC");
       <div class="modal-body">
         <input type="text" name="nome" class="form-control mb-2" placeholder="Nome da marca" required>
         <textarea name="descricao" class="form-control mb-2" placeholder="Descrição da marca"></textarea>
-        <label class="form-label">Logo (opcional)</label>
-        <input type="file" name="logo" class="form-control mb-2">
+        <label class="form-label">Logo *</label>
+        <input type="file" name="logo" required class="form-control mb-2">
       </div>
       <div class="modal-footer">
         <button type="submit" name="add_marca" class="btn btn-primary">Salvar</button>
