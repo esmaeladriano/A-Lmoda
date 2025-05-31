@@ -136,24 +136,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     <?php if (!empty($produtos_no_carrinho)): ?>
         <div id="carrinho-container">
             <?php 
+            // Agrupar produtos pelo nome e preço
+            $produtos_agrupados = [];
+            foreach ($produtos_no_carrinho as $produto) {
+                $chave = $produto['nome'] . '|' . $produto['preco'];
+                if (!isset($produtos_agrupados[$chave])) {
+                    $produtos_agrupados[$chave] = $produto;
+                } else {
+                    $produtos_agrupados[$chave]['quantidade'] += $produto['quantidade'];
+                }
+            }
+
             $total = 0;
-            foreach ($produtos_no_carrinho as $produto):
-                $total += $produto['preco'] * $produto['quantidade'];
-            
+            foreach ($produtos_agrupados as $produto):
+                $subtotal = $produto['preco'] * $produto['quantidade'];
+                $total += $subtotal;
             ?>
-            
-            <div class="product-card animate__animated animate__fadeInUp" id="produto-<?= $produto['id'] ?>">
+            <div class="product-card animate__animated animate__fadeInUp" id="produto-<?= $produto['id_produto'] ?>">
                 <img src="<?= 'http://localhost/A&Lmoda/painel/admin/uploads/'.$produto['imagem'] ?>" alt="<?= $produto['nome'] ?>">
                 <div class="product-info">
                     <h5><?= $produto['nome'] ?></h5>
                     <p>Preço: R$ <?= number_format($produto['preco'], 2, ',', '.') ?></p>
                     <div class="d-flex align-items-center">
-                        <input type="number" value="<?= $produto['quantidade'] ?>" class="form-control quantity-input" data-produto-id="<?= $produto['id'] ?>" onchange="atualizarQuantidade(<?= $produto['id'] ?>)">
+                        <input type="number" value="<?= $produto['quantidade'] ?>" class="form-control quantity-input" data-produto-id="<?= $produto['id_produto'] ?>" onchange="atualizarQuantidade(<?= $produto['id_produto'] ?>)">
                         <button class="btn btn-danger btn-sm ms-2" onclick="removerDoCarrinho(<?= $produto['id_produto'] ?>)">🗑</button>
                     </div>
                 </div>
                 <div class="product-price">
-                    <p>Subtotal: R$ <span class="subtotal" id="subtotal-<?= $produto['id'] ?>"><?= number_format($produto['preco'] * $produto['quantidade'], 2, ',', '.') ?></span></p>
+                    <p>Subtotal: R$ <span class="subtotal" id="subtotal-<?= $produto['id_produto'] ?>"><?= number_format($subtotal, 2, ',', '.') ?></span></p>
                 </div>
             </div>
             <?php endforeach; ?>
