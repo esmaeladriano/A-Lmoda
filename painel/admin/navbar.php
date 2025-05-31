@@ -2,7 +2,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">🛍️ A&L Moda -  <?=  $_SESSION['usuario_nome'] ?></a>
+    <a class="navbar-brand" href="#">🛍️ A&amp;L Moda -  <?=  $_SESSION['usuario_nome'] ?></a>
 
     <div class="ms-auto text-white me-3 d-none d-md-block">
       <?=  $_SESSION['email'] ?>
@@ -23,7 +23,7 @@
   <a href="depoimentos.php"><i class="bi bi-chat-dots"></i> Testemunhos</a>
   <a href="categorias.php"><i class="bi bi-tags"></i> Categorias</a>
   <a href="marcas.php"><i class="bi bi-building"></i> Marcas (Brands)</a>
-  <a href="#"><i class="bi bi-gear"></i> Configurações</a>
+  <a href="pedidos.php"><i class="bi bi-card-checklist"></i> Pedidos</a>
   <a href="../../login/exit.php" class="text-danger"><i class="bi bi-box-arrow-right"></i> Sair</a>
 </div>
 <style>

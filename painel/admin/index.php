@@ -127,6 +127,9 @@ $totalCategorias = $conn->query($queryCategorias)->fetch_assoc()['total'];
       </div>
     </div>
 
+    <!-- Vamos adicionar o grafica das vendas -->
+  
+
 
   </div>
   </div>
