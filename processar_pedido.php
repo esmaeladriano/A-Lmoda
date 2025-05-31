@@ -80,10 +80,44 @@ $stmt->bind_param("i", $id_usuario);
 $stmt->execute();
 
 // Sucesso
-echo "<div style='padding: 20px; font-family: sans-serif'>";
-echo "<h2>✅ Pedido efetuado com sucesso!</h2>";
-echo "<p>Número do pedido: <b>#{$id_pedido}</b></p>";
-echo "<p>Total: <b>KZ " . number_format($total, 2) . "</b></p>";
-echo "<a href='index.php' class='btn btn-primary'>Voltar à loja</a>";
-echo "</div>";
+echo "
+<div style='
+    max-width: 400px;
+    margin: 60px auto;
+    padding: 32px 24px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    text-align: center;
+    font-family: sans-serif;
+'>
+    <h2 style='color: #27ae60; margin-bottom: 16px;'>✅ Pedido efetuado com sucesso!</h2>
+    <p style='font-size: 1.1em;'>Número do pedido: <b>#{$id_pedido}</b></p>
+    <p style='font-size: 1.1em;'>Total: <b>KZ " . number_format($total, 2) . "</b></p>
+    <a href='index.php' 
+       style='
+            display: inline-block;
+            margin-top: 24px;
+            padding: 12px 32px;
+            background: #007bff;
+            color: #fff;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1em;
+            transition: background 0.2s;
+        '
+        id='voltarBtn'
+    >Voltar às compras</a>
+    <p style='margin-top: 18px; color: #888; font-size: 0.95em;'>Você será redirecionado automaticamente em 8 segundos.</p>
+</div>
+<script>
+    document.getElementById('voltarBtn').onclick = function() {
+        window.location.href = 'index.php';
+    };
+    setTimeout(function() {
+        window.location.href = 'index.php';
+    }, 8000);
+</script>
+";
 ?>

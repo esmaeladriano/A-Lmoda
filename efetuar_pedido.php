@@ -23,14 +23,17 @@ include_once('conexao.php');
                     <?php
                     if (!isset($_SESSION['usuario_id'])) {
                         echo "<div class='alert alert-warning'>⚠️ Faça login para ver o carrinho.</div>";
+                        echo "<a href='login' class='btn btn-primary'>Login</a>";
+
                         exit;
                     }
 
                     $id_usuario = $_SESSION['usuario_id'];
-                    $sql = "SELECT p.nome, c.quantidade, p.preco 
-                            FROM carrinho c 
-                            JOIN produtos p ON c.id_produto = p.id 
-                            WHERE c.id_usuario = ?";
+                    $sql = "SELECT p.nome, SUM(c.quantidade) as quantidade_total, p.preco 
+                        FROM carrinho c 
+                        JOIN produtos p ON c.id_produto = p.id 
+                        WHERE c.id_usuario = ?
+                        GROUP BY p.id, p.nome, p.preco";
                     $stmt = $conn->prepare($sql);
                     $stmt->bind_param("i", $id_usuario);
                     $stmt->execute();
@@ -44,10 +47,10 @@ include_once('conexao.php');
                     $total = 0;
                     echo '<ul class="list-group">';
                     while ($row = $result->fetch_assoc()) {
-                        $subtotal = $row['preco'] * $row['quantidade'];
+                        $subtotal = $row['preco'] * $row['quantidade_total'];
                         $total += $subtotal;
                         echo '<li class="list-group-item d-flex justify-content-between align-items-center">';
-                        echo htmlspecialchars($row['nome']) . " <span>x" . $row['quantidade'] . "</span>";
+                        echo htmlspecialchars($row['nome']) . " <span>x" . $row['quantidade_total'] . "</span>";
                         echo '<span>KZ ' . number_format($subtotal, 2) . '</span>';
                         echo '</li>';
                     }
@@ -66,13 +69,18 @@ include_once('conexao.php');
                 </div>
                 <div class="card-body">
                     <form action="processar_pedido.php" method="post">
+                        <?php
+                        // Preenche nome e telefone a partir da sessão, se disponíveis
+                        $nome = isset($_SESSION['usuario_nome']) ? htmlspecialchars($_SESSION['usuario_nome']) : '';
+                        $telefone = isset($_SESSION['email']) ? htmlspecialchars($_SESSION['email']) : '';
+                        ?>
                         <div class="mb-3">
                             <label for="nome" class="form-label">Nome completo</label>
-                            <input type="text" name="nome" id="nome" class="form-control" required>
+                            <input type="text" name="nome" id="nome" class="form-control" value="<?php echo $nome; ?>" required readonly>
                         </div>
                         <div class="mb-3">
                             <label for="telefone" class="form-label">Telefone</label>
-                            <input type="text" name="telefone" id="telefone" class="form-control" required>
+                            <input type="text" name="telefone" id="telefone" class="form-control" value="<?php echo $telefone; ?>" required readonly>
                         </div>
                         <div class="mb-3">
                             <label for="endereco" class="form-label">Endereço</label>

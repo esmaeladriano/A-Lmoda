@@ -13,7 +13,8 @@ $totalItensCarrinho = 0;
 if (isset($_SESSION['usuario_id'])) {
     $id_usuario = $_SESSION['usuario_id'];
 
-    $sql = "SELECT COUNT(*) FROM `carrinho` WHERE id_usuario = ?";
+    // Conta apenas produtos distintos no carrinho do usuário
+    $sql = "SELECT COUNT(DISTINCT id_produto) FROM `carrinho` WHERE id_usuario = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $id_usuario);
     $stmt->execute();
