@@ -18,11 +18,27 @@ if (isset($_POST['add_marca'])) {
     exit;
   }
 
-  // Upload da logo
-  if ($_FILES['logo']['error'] == 0) {
-    $ext = pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION);
+  // Upload da logo com validação de extensão e tamanho
+  if (isset($_FILES['logo']) && $_FILES['logo']['error'] == 0) {
+    $ext_permitidas = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+    $ext = strtolower(pathinfo($_FILES['logo']['name'], PATHINFO_EXTENSION));
+    $tamanho_max = 2 * 1024 * 1024; // 2MB
+
+    if (!in_array($ext, $ext_permitidas)) {
+      echo "<script>alert('❗ Extensão de imagem não permitida!'); window.location.href='marcas.php';</script>";
+      exit;
+    }
+
+    if ($_FILES['logo']['size'] > $tamanho_max) {
+      echo "<script>alert('❗ Imagem muito grande! Máximo 2MB.'); window.location.href='marcas.php';</script>";
+      exit;
+    }
+
     $logo_nome = uniqid() . "." . $ext;
-    move_uploaded_file($_FILES['logo']['tmp_name'], "uploads/" . $logo_nome);
+    if (!move_uploaded_file($_FILES['logo']['tmp_name'], "uploads/" . $logo_nome)) {
+      echo "<script>alert('❗ Erro ao salvar a imagem!'); window.location.href='marcas.php';</script>";
+      exit;
+    }
   }
 
   // Inserir no banco
