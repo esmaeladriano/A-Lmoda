@@ -15,7 +15,21 @@ $dadosVenda = mysqli_fetch_assoc($resultVenda);
 
 if ($dadosVenda) {
     echo "<p><strong>Cliente:</strong> " . htmlspecialchars($dadosVenda['nome_cliente']) . "</p>";
-    echo "<p><strong>Data:</strong> " . htmlspecialchars($dadosVenda['data_venda']) . "</p>";
+    // Função para converter número do mês em nome em português
+    function nomeMesPortugues($data) {
+      $meses = [
+        1 => 'janeiro', 2 => 'fevereiro', 3 => 'março', 4 => 'abril',
+        5 => 'maio', 6 => 'junho', 7 => 'julho', 8 => 'agosto',
+        9 => 'setembro', 10 => 'outubro', 11 => 'novembro', 12 => 'dezembro'
+      ];
+      $timestamp = strtotime($data);
+      $dia = date('d', $timestamp);
+      $mes = (int)date('m', $timestamp);
+      $ano = date('Y', $timestamp);
+      return "$dia de " . $meses[$mes] . " de $ano";
+    }
+
+    echo "<p><strong>Data:</strong> " . nomeMesPortugues($dadosVenda['data_venda']) . "</p>";
     echo "<p><strong>Vendido por:</strong> " . htmlspecialchars($dadosVenda['nome']) . "</p>";
 
     // Busca itens da venda com dados dos produtos
@@ -52,13 +66,13 @@ if ($dadosVenda) {
       echo "<tr>";
       echo "<td>" . htmlspecialchars($nome) . "</td>";
       echo "<td>" . (int)$dados['quantidade'] . "</td>";
-      echo "<td>R$ " . number_format($dados['preco_unitario'], 2, ',', '.') . "</td>";
-      echo "<td>R$ " . number_format($totalItem, 2, ',', '.') . "</td>";
+      echo "<td>Kz " . number_format($dados['preco_unitario'], 2, ',', '.') . "</td>";
+      echo "<td>Kz " . number_format($totalItem, 2, ',', '.') . "</td>";
       echo "</tr>";
     }
     echo "</table>";
 
-    echo "<p><strong>Total da Venda:</strong> R$ " . number_format($totalVenda, 2, ',', '.') . "</p>";
+    echo "<p><strong>Total da Venda:</strong> Kz " . number_format($totalVenda, 2, ',', '.') . "</p>";
 } else {
     echo "<p>Venda não encontrada.</p>";
 }
