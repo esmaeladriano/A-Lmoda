@@ -4,17 +4,20 @@ session_start();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $data = json_decode(file_get_contents("php://input"), true);
-  if ($data['acao'] === 'cadastrar') { // Vendedor vem da sessão
-    $nome_cliente = $data['nome_cliente']; // Agora recebendo o nome do cliente
-    $tipo_pagamento = $data['tipo_pagamento'];
 
-    $stmt = $conn->prepare("INSERT INTO vendas (nome_cliente, data_venda, tipo_pagamento) VALUES (?, NOW(), ?)");
-    $stmt->bind_param("ss", $nome_cliente, $tipo_pagamento); // Alterando para usar o nome do cliente
+  if ($data['acao'] === 'cadastrar') {
+    $nome_cliente = $data['nome_cliente'];
+    $tipo_pagamento = $data['tipo_pagamento'];
+    $vendido_por = $_SESSION['usuario_id']; // Supondo que o ID do usuário esteja na sessão
+
+    $stmt = $conn->prepare("INSERT INTO vendas (nome_cliente, data_venda, tipo_pagamento, vendido_por) VALUES (?, NOW(), ?, ?)");
+    $stmt->bind_param("ssi", $nome_cliente, $tipo_pagamento, $vendido_por);
     $stmt->execute();
     $id_venda = $stmt->insert_id;
 
+    // Corrigido: nome correto da tabela e uso de prepared statement
     foreach ($data['itens'] as $item) {
-      $stmtItem = $conn->prepare("INSERT INTO itens_venda (id_venda, id_produto, quantidade, preco_unitario) VALUES (?, ?, ?, ?)");
+      $stmtItem = $conn->prepare("INSERT INTO vendas_itens (venda_id, produto_id, quantidade, preco_unitario) VALUES (?, ?, ?, ?)");
       $stmtItem->bind_param("iiid", $id_venda, $item['id_produto'], $item['quantidade'], $item['preco_unitario']);
       $stmtItem->execute();
     }
@@ -26,12 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   if ($data['acao'] === 'excluir') {
     $id_venda = $data['id_venda'];
 
-    // Excluindo os itens da venda
-    $stmt = $conn->prepare("DELETE FROM itens_venda WHERE id_venda = ?");
+    // Corrigido: nome correto da tabela de itens
+    $stmt = $conn->prepare("DELETE FROM vendas_itens WHERE venda_id = ?");
     $stmt->bind_param("i", $id_venda);
     $stmt->execute();
 
-    // Excluindo a venda
     $stmt = $conn->prepare("DELETE FROM vendas WHERE id_venda = ?");
     $stmt->bind_param("i", $id_venda);
     $stmt->execute();
@@ -88,11 +90,35 @@ while ($row = $res->fetch_assoc()) {
             <td>
               <button class="btn btn-danger btn-sm" onclick="excluirVenda(<?= $v['id_venda'] ?>)">🗑</button>
               <button class="btn btn-info btn-sm" onclick="abrirDetalhesVenda(<?= $v['id_venda'] ?>)">🔍 Detalhes</button>
+
             </td>
           </tr>
         <?php endwhile; ?>
       </tbody>
     </table>
+
+    <!-- Criando modal abrirDetalhesVenda -->
+
+    <!-- Modal Detalhes da Venda -->
+    <div class="modal fade" id="modalDetalhesVenda" tabindex="-1" aria-labelledby="modalDetalhesVendaLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg"> <!-- Pode usar modal-xl se quiser mais largo -->
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalDetalhesVendaLabel">📄 Detalhes da Venda</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body" id="conteudoDetalhesVenda">
+            <!-- Conteúdo dinâmico via JavaScript -->
+            <p>Carregando detalhes...</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <!-- Modal de Nova Venda -->
     <div class="modal fade" id="modalVenda" tabindex="-1">
@@ -122,32 +148,7 @@ while ($row = $res->fetch_assoc()) {
                   <input type="text" name="nome_cliente" id="nome_cliente" required class="form-control"
                     placeholder="Nome do Cliente">
                 </div>
-                <script>
-                  // Se selecionar usuário, desabilita nome_cliente e vice-versa
-                  document.addEventListener('DOMContentLoaded', function () {
-                    const usuarioSelect = document.getElementById('usuario_sistema');
-                    const clienteInput = document.getElementById('nome_cliente');
 
-                    usuarioSelect.addEventListener('change', function () {
-                      if (this.value) {
-                        clienteInput.value = this.value;
-                        clienteInput.disabled = true;
-                      } else {
-                        clienteInput.value = '';
-                        clienteInput.disabled = false;
-                      }
-                    });
-
-                    clienteInput.addEventListener('input', function () {
-                      if (this.value) {
-                        usuarioSelect.value = '';
-                        usuarioSelect.disabled = true;
-                      } else {
-                        usuarioSelect.disabled = false;
-                      }
-                    });
-                  });
-                </script>
                 <div class="col">
                   <select name="tipo_pagamento" class="form-control" required>
                     <option value="">Pagamento</option>
@@ -160,7 +161,8 @@ while ($row = $res->fetch_assoc()) {
 
 
               <div id="itens-container"></div>
-              <button type="button" class="btn btn-secondary mt-2" onclick="addItem()" id="add-produto-btn">➕Produto</button>
+              <button type="button" class="btn btn-secondary mt-2" onclick="addItem()"
+                id="add-produto-btn">➕Produto</button>
               <!-- Vais -->
 
             </div>
@@ -205,6 +207,28 @@ while ($row = $res->fetch_assoc()) {
         </div>
       </div>
     </template>
+
+    <script>
+      function abrirDetalhesVenda(idVenda) {
+        // Exibe o modal
+        const modal = new bootstrap.Modal(document.getElementById('modalDetalhesVenda'));
+        modal.show();
+
+        // Limpa e mostra carregando
+        document.getElementById('conteudoDetalhesVenda').innerHTML = '<p>Carregando detalhes...</p>';
+
+        // Faz a requisição AJAX
+        fetch('detalhes_venda.php?id=' + idVenda)
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('conteudoDetalhesVenda').innerHTML = data;
+          })
+          .catch(error => {
+            document.getElementById('conteudoDetalhesVenda').innerHTML = '<p class="text-danger">Erro ao carregar os detalhes.</p>';
+          });
+      }
+    </script>
+
 
     <script>
       // Função para calcular o total do item
@@ -310,6 +334,32 @@ while ($row = $res->fetch_assoc()) {
       }
     </script>
 
+    <script>
+      // Se selecionar usuário, desabilita nome_cliente e vice-versa
+      document.addEventListener('DOMContentLoaded', function () {
+        const usuarioSelect = document.getElementById('usuario_sistema');
+        const clienteInput = document.getElementById('nome_cliente');
+
+        usuarioSelect.addEventListener('change', function () {
+          if (this.value) {
+            clienteInput.value = this.value;
+            clienteInput.disabled = true;
+          } else {
+            clienteInput.value = '';
+            clienteInput.disabled = false;
+          }
+        });
+
+        clienteInput.addEventListener('input', function () {
+          if (this.value) {
+            usuarioSelect.value = '';
+            usuarioSelect.disabled = true;
+          } else {
+            usuarioSelect.disabled = false;
+          }
+        });
+      });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
