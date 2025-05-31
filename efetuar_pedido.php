@@ -79,7 +79,7 @@ include_once('conexao.php');
                             <input type="text" name="nome" id="nome" class="form-control" value="<?php echo $nome; ?>" required readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="telefone" class="form-label">Telefone</label>
+                            <label for="telefone" class="form-label">Email</label>
                             <input type="text" name="telefone" id="telefone" class="form-control" value="<?php echo $telefone; ?>" required readonly>
                         </div>
                         <div class="mb-3">
